@@ -1,10 +1,10 @@
-FROM node:26.13.0-alpine AS auth-runtime
+FROM node:26.13.1-alpine AS auth-runtime
 WORKDIR /app/auth
 COPY auth/package.json auth/package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts
 COPY auth/src ./src
 
-FROM node:26.13.0-alpine AS build
+FROM node:26.13.1-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY vendor ./vendor
@@ -12,7 +12,7 @@ RUN npm ci --ignore-scripts
 COPY . .
 RUN node scripts/patch-import-x.mjs && npx nuxt prepare && npm run build
 
-FROM node:26.13.0-alpine
+FROM node:26.13.1-alpine
 RUN apk add --no-cache "zlib>=1.4-r0" \
   && rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx
 WORKDIR /app
