@@ -1,5 +1,11 @@
 # @crateview/registry-ui
 
+## 0.8.1
+
+### Patch Changes
+
+- dc6c22b: Update zlib and remove the unused npm CLI and its bundled dependencies from the production container.
+
 ## 0.8.0
 
 ### Minor Changes
