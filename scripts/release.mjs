@@ -3,9 +3,9 @@ import { mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
-import { apps, releasePlan } from './release-plan.mjs';
 import { requestPromotion } from '../apps/registry-ui/scripts/request-docs-promotion.mjs';
 import { assignWebsiteVersion } from './docs-publication.mjs';
+import { apps, releasePlan } from './release-plan.mjs';
 
 const config = { branch: process.env.GITHUB_REF };
 const get = (program, args) => execFileSync(program, args, { encoding: 'utf8' }).trim();

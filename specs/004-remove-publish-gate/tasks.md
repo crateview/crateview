@@ -22,7 +22,7 @@ No additional setup or dependencies; reuse the existing workflow and test harnes
 
 ## Cross-Cutting Verification
 
-- [ ] T003 Run and record the checks in `specs/004-remove-publish-gate/quickstart.md`; apply the repo's Changesets policy without introducing an artificial application version bump.
+- [X] T003 Run and record the checks in `specs/004-remove-publish-gate/quickstart.md`; apply the repo's Changesets policy without introducing an artificial application version bump.
 
 ## Dependencies and Strategy
 

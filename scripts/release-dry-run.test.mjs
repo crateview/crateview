@@ -90,7 +90,10 @@ for (const pending of [['registry-ui'], ['website'], ['registry-ui', 'website']]
     const branches = calls
       .filter(([tool, cmd, sub]) => tool === 'gh' && cmd === 'pr' && sub === 'create')
       .map((args) => args[args.indexOf('--head') + 1]);
-    deepEqual(branches, pending.map((app) => `changeset-release/${app}`));
+    deepEqual(
+      branches,
+      pending.map((app) => `changeset-release/${app}`),
+    );
     ok(!calls.some(([tool, cmd]) => tool === 'docker' || (tool === 'gh' && cmd === 'release')));
   });
 }
