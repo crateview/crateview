@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  checks:
+  registry-ui:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     defaults:
@@ -59,3 +59,46 @@ jobs:
         run: docker build -t crateview-accounts:ci .
       - name: Test account bootstrap and Docker access with the production image
         run: npm run test:auth:image -- crateview-accounts:ci
+
+  website:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: apps/website
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+          cache-dependency-path: apps/website/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Check types
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Check formatting
+        run: npm run format:check
+      - name: Run unit tests
+        run: npm test
+      - name: Build production website and docs
+        run: npm run build
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Test production website
+        run: npm run test:e2e
+
+  checks:
+    runs-on: ubuntu-latest
+    needs: [registry-ui, website]
+    if: ${{ always() }}
+    steps:
+      - name: Require both app checks
+        env:
+          REGISTRY_RESULT: ${{ needs.registry-ui.result }}
+          WEBSITE_RESULT: ${{ needs.website.result }}
+        run: test "$REGISTRY_RESULT" = success && test "$WEBSITE_RESULT" = success
