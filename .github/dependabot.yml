@@ -4,7 +4,7 @@ updates:
     ignore:
       - dependency-name: '@types/node'
         update-types: ['version-update:semver-major']
-    directory: /
+    directories: [/apps/registry-ui, /apps/registry-ui/auth, /apps/website]
     schedule:
       interval: weekly
       day: monday
@@ -20,7 +20,7 @@ updates:
     ignore:
       - dependency-name: 'node'
         update-types: ['version-update:semver-major']
-    directory: /
+    directories: [/apps/registry-ui, /apps/registry-ui/auth, /apps/website]
     schedule:
       interval: weekly
       day: monday
@@ -28,7 +28,7 @@ updates:
       timezone: Europe/Berlin
     open-pull-requests-limit: 5
   - package-ecosystem: docker-compose
-    directory: /
+    directories: [/apps/registry-ui, /apps/website]
     schedule:
       interval: weekly
       day: monday
