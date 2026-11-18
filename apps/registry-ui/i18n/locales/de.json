@@ -1,4 +1,11 @@
 {
+  "garbageCollection": "Garbage Collection",
+  "garbageCollectionStart": "Garbage Collection starten",
+  "garbageCollectionWarning": "Dies betrifft die gesamte Registry und kann Schreibzugriffe unterbrechen.",
+  "garbageCollectionRunning": "Garbage Collection läuft.",
+  "garbageCollectionSucceeded": "Garbage Collection abgeschlossen.",
+  "garbageCollectionFailed": "Garbage Collection fehlgeschlagen. Prüfe den Wartungsjob.",
+  "garbageCollectionUnknown": "Der Status der Garbage Collection ist unbekannt. Prüfe den Wartungsjob vor einem erneuten Start.",
   "settings": "Einstellungen",
   "settingsDescription": "Passe Darstellung und Sprache deines Arbeitsbereichs an.",
   "themeDescription": "Wähle hell, dunkel oder die Darstellung deines Systems.",
