@@ -29,12 +29,15 @@ jobs:
           node-version-file: '.nvmrc'
           cache: npm
           cache-dependency-path: |
+            package-lock.json
             apps/registry-ui/package-lock.json
             apps/registry-ui/auth/package-lock.json
       - name: Install dependencies
         run: npm ci
       - name: Validate monorepo release decisions
-        run: node --test scripts/*.test.mjs
+        run: |
+          npm ci --ignore-scripts
+          node --test scripts/*.test.mjs
         working-directory: .
       - name: Check picomatch hardening
         run: node --test --test-name-pattern=registry-ui ../../scripts/checks/picomatch-hardening.test.mjs

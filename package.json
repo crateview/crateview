@@ -6,7 +6,9 @@
     "node": ">=26.13.1 <27"
   },
   "scripts": {
-    "setup": "npm ci --prefix apps/registry-ui && npm ci --prefix apps/registry-ui/auth && npm ci --prefix apps/website",
+    "setup": "npm ci && npm ci --prefix apps/registry-ui && npm ci --prefix apps/registry-ui/auth && npm ci --prefix apps/website",
+    "changeset": "changeset",
+    "version:packages": "node scripts/version-packages.mjs",
     "dev:registry-ui": "npm --prefix apps/registry-ui run dev",
     "dev:website": "npm --prefix apps/website run dev",
     "check": "npm run check:registry-ui && npm run check:website",
@@ -14,5 +16,12 @@
     "check:website": "npm --prefix apps/website run typecheck && npm --prefix apps/website run lint && npm --prefix apps/website run format:check",
     "test": "node --test scripts/*.test.mjs scripts/checks/*.test.mjs && npm --prefix apps/registry-ui test && npm --prefix apps/registry-ui run test:auth && npm --prefix apps/website test",
     "build": "npm --prefix apps/registry-ui run build && npm --prefix apps/website run build"
+  },
+  "devDependencies": {
+    "@changesets/cli": "3.0.3",
+    "picomatch": "file:apps/registry-ui/vendor/crateview-picomatch-hardened-4.0.7.tgz"
+  },
+  "overrides": {
+    "picomatch@4": "$picomatch"
   }
 }
