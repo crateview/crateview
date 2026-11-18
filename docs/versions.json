@@ -1,0 +1,212 @@
+{
+  "stable": "v0.8",
+  "versions": [
+    {
+      "id": "v0.1",
+      "release": "v0.1.2",
+      "revision": "18e3876904587f6d53480d9d38b67ac3ed195318",
+      "status": "archived",
+      "slugs": [
+        "overview",
+        "installation",
+        "configuration",
+        "authentication",
+        "theming",
+        "usage",
+        "operations",
+        "troubleshooting"
+      ],
+      "captures": {
+        "overviewRoute": "/home",
+        "monitoring": false,
+        "accounts": false,
+        "userActions": false
+      }
+    },
+    {
+      "id": "v0.2",
+      "release": "v0.2.1",
+      "revision": "6c5e3d353c4a56bccaecb114571c3af1b4e9d9e9",
+      "status": "archived",
+      "slugs": [
+        "overview",
+        "installation",
+        "configuration",
+        "authentication",
+        "theming",
+        "usage",
+        "operations",
+        "troubleshooting"
+      ],
+      "captures": {
+        "overviewRoute": "/explore",
+        "monitoring": false,
+        "accounts": false,
+        "userActions": false
+      }
+    },
+    {
+      "id": "v0.3",
+      "release": "v0.3.0",
+      "revision": "a5f5497df76315ba3a7f860911d301f2c0ab0842",
+      "status": "archived",
+      "slugs": [
+        "overview",
+        "installation",
+        "configuration",
+        "authentication",
+        "theming",
+        "usage",
+        "operations",
+        "troubleshooting"
+      ],
+      "captures": {
+        "overviewRoute": "/explore",
+        "monitoring": false,
+        "accounts": false,
+        "userActions": false
+      }
+    },
+    {
+      "id": "v0.4",
+      "release": "v0.4.0",
+      "revision": "6b956de6a2891fcf8bfbb720369dda0693d8115e",
+      "status": "archived",
+      "slugs": [
+        "overview",
+        "installation",
+        "configuration",
+        "authentication",
+        "theming",
+        "usage",
+        "operations",
+        "troubleshooting",
+        "monitoring"
+      ],
+      "captures": {
+        "overviewRoute": "/explore",
+        "monitoring": true,
+        "accounts": false,
+        "userActions": false
+      }
+    },
+    {
+      "id": "v0.5",
+      "release": "v0.5.0",
+      "revision": "bcb8fdd6bd0c2f852213546c985faf7be5e249f6",
+      "status": "archived",
+      "slugs": [
+        "overview",
+        "installation",
+        "configuration",
+        "authentication",
+        "theming",
+        "usage",
+        "operations",
+        "troubleshooting",
+        "monitoring"
+      ],
+      "captures": {
+        "overviewRoute": "/explore",
+        "monitoring": true,
+        "accounts": true,
+        "userActions": false
+      }
+    },
+    {
+      "id": "next",
+      "release": null,
+      "revision": "9954f9c33e34c65bab19378a9b488e9b8ed13b6d",
+      "status": "preview",
+      "slugs": [
+        "overview",
+        "installation",
+        "configuration",
+        "authentication",
+        "theming",
+        "usage",
+        "operations",
+        "troubleshooting",
+        "monitoring"
+      ],
+      "captures": {
+        "overviewRoute": "/explore",
+        "monitoring": true,
+        "accounts": true,
+        "userActions": true
+      }
+    },
+    {
+      "id": "v0.6",
+      "release": "v0.6.0",
+      "revision": "8fe2c00e9419faf971c2ab66fa3a561cb3dc6c00",
+      "status": "archived",
+      "slugs": [
+        "overview",
+        "installation",
+        "configuration",
+        "authentication",
+        "theming",
+        "usage",
+        "operations",
+        "troubleshooting",
+        "monitoring"
+      ],
+      "captures": {
+        "overviewRoute": "/explore",
+        "monitoring": true,
+        "accounts": true,
+        "userActions": true
+      },
+      "docsRevision": "36999cc92f86da7b1c41fb4677bbb180a2bdac24"
+    },
+    {
+      "id": "v0.7",
+      "release": "v0.7.0",
+      "revision": "5847d7c50dd1744175fab26f18604b359732389c",
+      "status": "archived",
+      "slugs": [
+        "overview",
+        "installation",
+        "configuration",
+        "authentication",
+        "theming",
+        "usage",
+        "operations",
+        "troubleshooting",
+        "monitoring"
+      ],
+      "captures": {
+        "overviewRoute": "/explore",
+        "monitoring": true,
+        "accounts": true,
+        "userActions": true
+      },
+      "docsRevision": "26385d4da0e4cabfe2a39ad394c89a8dddce0db8"
+    },
+    {
+      "id": "v0.8",
+      "release": "v0.8.2",
+      "revision": "792605d68e11703bd42f48b75608f44ace0c6d98",
+      "status": "stable",
+      "slugs": [
+        "overview",
+        "installation",
+        "configuration",
+        "authentication",
+        "theming",
+        "usage",
+        "operations",
+        "troubleshooting",
+        "monitoring"
+      ],
+      "captures": {
+        "overviewRoute": "/explore",
+        "monitoring": true,
+        "accounts": true,
+        "userActions": true
+      },
+      "docsRevision": "8248c5b9336e49bec28390f3762a9c8101231f4e"
+    }
+  ]
+}

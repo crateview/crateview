@@ -1,0 +1,96 @@
+name: Promote registry documentation
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '35 * * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  promote:
+    if: github.ref == 'refs/heads/main' && vars.CRATEVIEW_MONOREPO_PUBLISH == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    concurrency:
+      group: crateview-production-writers
+      cancel-in-progress: false
+    permissions:
+      actions: write
+      contents: write
+      pull-requests: write
+    env:
+      MONOREPO_PROMOTION: 'true'
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: '.nvmrc'
+      - name: Set promotion workspace
+        run: echo "REQUEST_FILE=$RUNNER_TEMP/promotion.json" >> "$GITHUB_ENV"
+      - name: Select the oldest eligible pinned registry release
+        id: request
+        run: node apps/website/scripts/select-docs-release.mjs
+      - name: Prepare promotion
+        if: steps.request.outputs.pending == 'true'
+        id: prep
+        run: |
+          set -euo pipefail
+          tag=$(jq -er 'select(.schema == 2) | .tag' "$REQUEST_FILE")
+          [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          branch="docs-promotion/$tag"
+          number=$(gh pr list --base main --head "$branch" --json number --jq '.[0].number // empty')
+          if [ -n "$number" ]; then
+            echo "Promotion is already awaiting review: #$number"
+            exit 0
+          fi
+          revision=$(jq -er '.registryRevision' "$REQUEST_FILE")
+          digest=$(jq -er '.imageDigest' "$REQUEST_FILE")
+          [[ "$revision" =~ ^[a-f0-9]{40}$ && "$digest" =~ ^sha256:[a-f0-9]{64}$ ]]
+          test "$(git rev-parse "refs/tags/$tag^{commit}")" = "$revision"
+          git worktree add --detach "$RUNNER_TEMP/source" "$revision"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          echo "image=ghcr.io/crateview/registry-ui@$digest" >> "$GITHUB_OUTPUT"
+          echo "series=${tag%.*}" >> "$GITHUB_OUTPUT"
+      - name: Stage docs and capture the verified release image
+        if: steps.prep.outputs.branch != ''
+        working-directory: apps/website
+        env:
+          REGISTRY_SOURCE: ${{ runner.temp }}/source/apps/registry-ui
+          REGISTRY_RELEASE_IMAGE: ${{ steps.prep.outputs.image }}
+          DOCS_SERIES: ${{ steps.prep.outputs.series }}
+        run: |
+          node scripts/promote-docs.mjs "$RUNNER_TEMP/source/docs" ../../docs "$REQUEST_FILE"
+          npm ci
+          npm ci --prefix "$REGISTRY_SOURCE/auth"
+          npx playwright install --with-deps chromium
+          sudo apt-get update
+          sudo apt-get install -y webp
+          node scripts/capture-release.mjs "$DOCS_SERIES"
+      - name: Validate and open a reviewed promotion PR
+        if: steps.prep.outputs.branch != ''
+        env:
+          BRANCH: ${{ steps.prep.outputs.branch }}
+        run: |
+          set -euo pipefail
+          node scripts/stage-docs-promotion.mjs
+          npm --prefix apps/website run typecheck
+          npm --prefix apps/website run lint
+          npm --prefix apps/website run format:check
+          npm --prefix apps/website test
+          npm --prefix apps/website run build
+          npm --prefix apps/website run test:e2e
+          test "$(git ls-remote origin refs/heads/main | cut -f1)" = "$GITHUB_SHA"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -c "$BRANCH"
+          git add -- docs apps/website/public/images/docs apps/website/.changeset
+          git commit -m "docs: promote ${BRANCH#*/}"
+          old=$(git ls-remote origin "refs/heads/$BRANCH" | cut -f1)
+          git push "--force-with-lease=refs/heads/$BRANCH:$old" origin "$BRANCH"
+          gh pr create --head "$BRANCH" --base main --title "docs: promote ${BRANCH#*/}" --body 'Publish the pinned registry documentation, matching captures, and website Changeset together.'
+          gh workflow run ci.yml --ref "$BRANCH"

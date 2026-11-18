@@ -1,0 +1,14 @@
+.nuxt
+.output
+.dev
+node_modules
+package-lock.json
+test-results
+playwright-report
+coverage
+
+.data
+.cache
+
+vendor/deepmerge/index.cjs
+vendor/deepmerge/license.txt

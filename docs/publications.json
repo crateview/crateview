@@ -1,0 +1,42 @@
+{
+  "v0.6.0": {
+    "schema": 1,
+    "tag": "v0.6.0",
+    "registryRevision": "8fe2c00e9419faf971c2ab66fa3a561cb3dc6c00",
+    "docsRevision": "36999cc92f86da7b1c41fb4677bbb180a2bdac24",
+    "docsCommit": "26385d4da0e4cabfe2a39ad394c89a8dddce0db8",
+    "websiteVersion": "0.4.3"
+  },
+  "v0.7.0": {
+    "schema": 1,
+    "tag": "v0.7.0",
+    "registryRevision": "5847d7c50dd1744175fab26f18604b359732389c",
+    "docsRevision": "26385d4da0e4cabfe2a39ad394c89a8dddce0db8",
+    "docsCommit": "e693ebc0d4b9b6ffcc6f13d2c7062253db1e17cc",
+    "websiteVersion": "0.4.4"
+  },
+  "v0.8.0": {
+    "schema": 1,
+    "tag": "v0.8.0",
+    "registryRevision": "244ad8eb2cea0317f9ab149c238def5b414af565",
+    "docsRevision": "cb97cf8090549b792e795a5957da868551fe72fc",
+    "docsCommit": "1b5b9e1660b5c4ae0e223f68846616b4c5a11168",
+    "websiteVersion": "0.4.6"
+  },
+  "v0.8.1": {
+    "schema": 1,
+    "tag": "v0.8.1",
+    "registryRevision": "8c7302518981b60a20a4583125c24e39dc2e8517",
+    "docsRevision": "1b5b9e1660b5c4ae0e223f68846616b4c5a11168",
+    "docsCommit": "8248c5b9336e49bec28390f3762a9c8101231f4e",
+    "websiteVersion": "0.4.9"
+  },
+  "v0.8.2": {
+    "schema": 1,
+    "tag": "v0.8.2",
+    "registryRevision": "792605d68e11703bd42f48b75608f44ace0c6d98",
+    "docsRevision": "8248c5b9336e49bec28390f3762a9c8101231f4e",
+    "docsCommit": "52a7be3122b01ab0d81d698b9286f201f36b5a45",
+    "websiteVersion": "0.4.10"
+  }
+}
