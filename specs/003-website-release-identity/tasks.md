@@ -22,7 +22,7 @@ No shared infrastructure changes. Verify the feature pointer and issue checklist
 
 ## Phase 4: User Story 2 - Find the Website Package (P1)
 
-- [ ] T002 [P] [US2] Add `org.opencontainers.image.source=https://github.com/crateview/crateview` to the final stage of `apps/website/Dockerfile`; run the release-script tests and verify the label by building and inspecting a local image, without publishing.
+- [X] T002 [P] [US2] Add `org.opencontainers.image.source=https://github.com/crateview/crateview` to the final stage of `apps/website/Dockerfile`; run the release-script tests and verify the label by building and inspecting a local image, without publishing.
 - [ ] T003 [US2] After separate hosted-change approval, have a package admin relink the existing `ghcr.io/crateview/website` in place using `specs/003-website-release-identity/quickstart.md`; inventory and preserve its private visibility, effective access, image tags and digests. Confirm the actual listing in `crateview/crateview`; do not change access or publish for verification without separate approval. Record hosted evidence in the issue, not an empty commit.
 
 **Independent acceptance (FR-003, FR-004, SC-002, SC-003)**: Local image reports the canonical source; an authorized user can find the same private package in the monorepo; existing tagged digests and authorized pulls are unchanged. Track publisher access and the previous `403` explicitly.
