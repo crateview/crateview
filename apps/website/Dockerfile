@@ -5,7 +5,7 @@ COPY apps/website/vendor ./vendor
 RUN npm ci --ignore-scripts
 COPY apps/website/ ./
 COPY docs/ /repo/docs/
-RUN node scripts/patch-import-x.mjs && npx nuxt prepare && npm run build
+RUN npm run postinstall && npm run build
 
 FROM node:26.13.1-alpine
 RUN apk add --no-cache "zlib>=1.4-r0" \

@@ -10,7 +10,7 @@ COPY package.json package-lock.json ./
 COPY vendor ./vendor
 RUN npm ci --ignore-scripts
 COPY . .
-RUN node scripts/patch-import-x.mjs && npx nuxt prepare && npm run build
+RUN npm run postinstall && npm run build
 
 FROM node:26.13.1-alpine
 RUN apk add --no-cache "zlib>=1.4-r0" \
