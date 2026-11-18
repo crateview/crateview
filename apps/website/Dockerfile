@@ -8,6 +8,7 @@ COPY docs/ /repo/docs/
 RUN npm run postinstall && npm run build
 
 FROM node:26.13.1-alpine
+LABEL org.opencontainers.image.source="https://github.com/crateview/crateview"
 RUN apk add --no-cache "zlib>=1.4-r0" \
   && rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx
 WORKDIR /app

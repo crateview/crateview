@@ -1,6 +1,10 @@
 import { expect, test } from '@playwright/test'
+import manifest from '../../package.json' with { type: 'json' }
 import { docSlugs, docVersions, stableDocVersion } from '../../shared/docs'
 import { supportedLocales } from '../../shared/locales'
+
+const version = manifest.version
+const footerVersionPattern = new RegExp(`>v${RegExp.escape(version)}<`, 'g')
 
 test('server renders all landing pages and all documentation, with SEO and sitemap', async ({
   request,
@@ -22,6 +26,8 @@ test('server renders all landing pages and all documentation, with SEO and sitem
       expect(html).toContain('rel="canonical"')
       expect(html).toContain('hreflang="de-DE"')
       expect(html).toContain(`dir="${locale.dir}"`)
+      const footer = html.match(/<footer\b[^>]*>([\s\S]*?)<\/footer>/)?.[1] ?? ''
+      expect(footer.match(footerVersionPattern) ?? [], url).toHaveLength(1)
       expect(html).toContain('href="https://tobiaswaelde.com"')
       expect(html).toContain(`href="${prefix}/imprint"`)
       expect(html).toContain(`href="${prefix}/privacy-policy"`)
@@ -58,6 +64,26 @@ test('server renders all landing pages and all documentation, with SEO and sitem
   expect(await (await request.get('/robots.txt')).text()).toContain(
     'Sitemap: https://crateview.de/sitemap.xml',
   )
+})
+
+test('website version stays readable in the shared footer on desktop and narrow RTL pages', async ({
+  page,
+}) => {
+  const footer = page.getByRole('contentinfo')
+  const versionText = footer.getByText(`v${version}`, { exact: true })
+
+  await page.goto('/')
+  await expect(versionText).toHaveCount(1)
+  await expect(versionText).toBeVisible()
+
+  await page.setViewportSize({ width: 360, height: 800 })
+  await page.goto(`/ar/docs/${stableDocVersion}/overview`)
+  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
+  await expect(versionText).toHaveCount(1)
+  await expect(versionText).toHaveAttribute('dir', 'ltr')
+  await versionText.scrollIntoViewIfNeeded()
+  await expect(versionText).toBeInViewport()
+  await expect(footer.locator('a[href="/ar/imprint"]')).toBeVisible()
 })
 
 test('landing navigation, real product previews, copy and FAQ work', async ({ page, context }) => {
