@@ -39,7 +39,7 @@
 ## Phase 6: Polish and cross-cutting validation
 
 - [X] T012 Run `specs/001-crateview-monorepo/quickstart.md` from a fresh checkout and record evidence in `docs/monorepo-migration.md`. Rehearse prior-digest rollback with website auto-updates paused. Document separately authorized handoff: reconcile legacy receipts, pause old writers, rename in place, update integrations, verify redirects/checks and GHCR permissions/visibility, and resume one writer per stream. Do not publish `latest`, rename, deploy or change hosted configuration in this task.
-- [ ] T013 Add the reviewed feature Changesets metadata in `apps/registry-ui/.changeset/` and `apps/website/.changeset/` as applicable after T012; verify both app scopes and bumps against the actual release plan without running version, release or publish commands.
+- [X] T013 Add the reviewed feature Changesets metadata in `apps/registry-ui/.changeset/` and `apps/website/.changeset/` as applicable after T012; verify both app scopes and bumps against the actual release plan without running version, release or publish commands.
 
 ### Post-cutover follow-up (separately authorized)
 
