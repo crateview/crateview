@@ -1,4 +1,11 @@
 {
+  "garbageCollection": "غیر استعمال شدہ ڈیٹا کی صفائی",
+  "garbageCollectionStart": "غیر استعمال شدہ ڈیٹا کی صفائی شروع کریں",
+  "garbageCollectionWarning": "یہ پوری رجسٹری پر اثر انداز ہوتا ہے اور لکھنے کے عمل میں رکاوٹ ڈال سکتا ہے۔",
+  "garbageCollectionRunning": "غیر استعمال شدہ ڈیٹا کی صفائی جاری ہے۔",
+  "garbageCollectionSucceeded": "غیر استعمال شدہ ڈیٹا کی صفائی مکمل ہو گئی۔",
+  "garbageCollectionFailed": "صفائی ناکام رہی۔ دیکھ بھال کا کام چیک کریں۔",
+  "garbageCollectionUnknown": "صفائی کی حالت معلوم نہیں۔ دوبارہ شروع کرنے سے پہلے دیکھ بھال کا کام چیک کریں۔",
   "settings": "ترتیبات",
   "settingsDescription": "اپنے کام کی جگہ کی ظاہری شکل اور زبان کو حسب ضرورت بنائیں۔",
   "themeDescription": "روشنی، اندھیرے کا انتخاب کریں، یا اپنے سسٹم کی ظاہری شکل کی پیروی کریں۔",

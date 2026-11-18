@@ -24,11 +24,13 @@
         <LanguageSwitch />
       </UFormField>
     </UPageCard>
+    <GarbageCollectionPanel v-if="registry.user.value" :key="registry.user.value" :operator="registry.user.value" />
     <AboutSection />
   </div>
 </template>
 
 <script setup lang="ts">
 const { t } = useI18n();
+const registry = useRegistry();
 useHead(() => ({ title: t('settings') }));
 </script>

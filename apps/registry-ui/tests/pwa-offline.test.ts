@@ -29,6 +29,7 @@ describe('offline navigation boundary', () => {
   it.each([
     '/registry/api',
     '/registry/api/registry/catalog',
+    '/registry/api/registry/garbage-collection',
     '/registry/v2',
     '/registry/v2/private/manifests/latest',
     '/other/',

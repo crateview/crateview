@@ -1,4 +1,11 @@
 {
+  "garbageCollection": "Сборка мусора",
+  "garbageCollectionStart": "Запустить сборку мусора",
+  "garbageCollectionWarning": "Операция затрагивает весь реестр и может прервать запись.",
+  "garbageCollectionRunning": "Выполняется сборка мусора.",
+  "garbageCollectionSucceeded": "Сборка мусора завершена.",
+  "garbageCollectionFailed": "Не удалось выполнить сборку мусора. Проверьте задание обслуживания.",
+  "garbageCollectionUnknown": "Состояние сборки мусора неизвестно. Перед повторным запуском проверьте задание обслуживания.",
   "settings": "Настройки",
   "settingsDescription": "Настройте внешний вид и язык вашего рабочего пространства.",
   "themeDescription": "Выберите светлый, темный или следуйте внешнему виду вашей системы.",

@@ -1,4 +1,11 @@
 {
+  "garbageCollection": "Garbage collection",
+  "garbageCollectionStart": "Run garbage collection",
+  "garbageCollectionWarning": "This affects the entire registry and may interrupt writes.",
+  "garbageCollectionRunning": "Garbage collection is running.",
+  "garbageCollectionSucceeded": "Garbage collection completed.",
+  "garbageCollectionFailed": "Garbage collection failed. Check the maintenance job.",
+  "garbageCollectionUnknown": "Garbage collection status is unknown. Check the maintenance job before starting again.",
   "settings": "Settings",
   "settingsDescription": "Customize the appearance and language of your workspace.",
   "themeDescription": "Choose light, dark, or follow your system appearance.",

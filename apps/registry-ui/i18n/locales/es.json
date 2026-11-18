@@ -1,4 +1,11 @@
 {
+  "garbageCollection": "Recolección de basura",
+  "garbageCollectionStart": "Ejecutar la recolección de basura",
+  "garbageCollectionWarning": "Esto afecta a todo el registro y puede interrumpir las escrituras.",
+  "garbageCollectionRunning": "La recolección de basura está en curso.",
+  "garbageCollectionSucceeded": "La recolección de basura ha finalizado.",
+  "garbageCollectionFailed": "La recolección de basura ha fallado. Revisa la tarea de mantenimiento.",
+  "garbageCollectionUnknown": "Se desconoce el estado de la recolección de basura. Revisa la tarea de mantenimiento antes de volver a iniciarla.",
   "settings": "Ajustes",
   "settingsDescription": "Personaliza la apariencia y el idioma de tu espacio de trabajo.",
   "themeDescription": "Elija claro, oscuro o siga la apariencia de su sistema.",
