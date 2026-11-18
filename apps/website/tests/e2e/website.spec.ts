@@ -40,7 +40,7 @@ test('server renders all landing pages and all documentation, with SEO and sitem
       }
       if (path.startsWith('/docs/v0.4/')) {
         expect(html).toContain(
-          `https://github.com/crateview/docs/edit/main/${locale.code}${path}.md`,
+          `https://github.com/crateview/crateview/edit/main/docs/${locale.code}${path}.md`,
         )
       }
     }

@@ -86,9 +86,27 @@ test('unknown versions and unavailable guides return 404', async ({ request }) =
     '/docs/unknown',
   ])
     expect((await request.get(path)).status(), path).toBe(404)
-  const xml = await (await request.get('/sitemap.xml')).text()
-  expect(xml).toContain('/docs/v0.1/overview')
-  expect(xml).not.toContain('/docs/next/')
+})
+
+test('sitemap and robots publish every localized release route but no preview', async ({
+  request,
+}) => {
+  const base = 'https://crateview.de'
+  const sitemap = await request.get('/sitemap.xml')
+  expect(sitemap.ok()).toBe(true)
+  const expected = supportedLocales.flatMap(({ code }) =>
+    [
+      '/docs/releases',
+      ...docVersions.flatMap(({ id, slugs }) => slugs.map((slug) => docPath(id, slug))),
+    ].map((path) => base + localizedPath(code, path)),
+  )
+  const found = [...(await sitemap.text()).matchAll(/<loc>([^<]+\/docs\/[^<]+)<\/loc>/g)].map(
+    ([, url]) => url,
+  )
+  expect(found.sort()).toEqual(expected.sort())
+  const robots = await request.get('/robots.txt')
+  expect(robots.ok()).toBe(true)
+  expect(await robots.text()).toContain(`Sitemap: ${base}/sitemap.xml`)
 })
 
 test('mobile version selection preserves RTL, language and fragment', async ({ page }) => {
