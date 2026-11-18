@@ -147,6 +147,14 @@ Without a configured secret, a random process-local secret is generated; restart
 
 Manifest deletion is off by default in the UI. Enable `NUXT_REGISTRY_DELETE_ENABLED=true` and enable `storage.delete.enabled` in Distribution to expose it. Standard deletion uses a **digest**, not a tag: all tags pointing at that manifest are affected. The confirmation lists these tags. A concurrent registry writer can change references after the preview; there is no registry transaction API to lock aliases. Deletion does not run garbage collection or promise immediate disk reclamation.
 
+Garbage collection is a separate, opt-in maintenance integration. Its private server settings are
+`NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED` (default `false`),
+`NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` (comma-separated managed usernames; no wildcard),
+`NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` (HTTPS origin without a path), and
+`NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN` (the adapter's bearer credential). Leave it off unless an
+operator-controlled adapter targets the same registry as Crateview. The adapter owns job execution,
+write protection, single-run admission, and durable status; Crateview does not execute registry commands.
+
 ## Optional account management
 
 For new `htpasswd` deployments, use `compose.auth.integrated.yaml`: user management runs inside Crateview, with no extra service or port. Set `NUXT_AUTH_MODE=htpasswd` and `NUXT_AUTH_DATA_DIR=/app/auth-data`; mount the same account directory read-write in Crateview and read-only in Distribution. Leave `NUXT_AUTH_SERVICE_URL` and `NUXT_AUTH_SERVICE_SECRET` empty.

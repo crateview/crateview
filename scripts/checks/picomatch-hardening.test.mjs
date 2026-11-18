@@ -11,6 +11,9 @@ for (const app of ['registry-ui', 'website']) {
     const copies = Object.keys(packages).filter((path) => /(?:^|\/)node_modules\/picomatch$/.test(path));
     assert.ok(copies.length > 0);
     for (const path of copies) {
+      assert.equal(packages[path].name, '@crateview/picomatch-hardened', path);
+      assert.match(packages[path].resolved, /^file:vendor\/crateview-picomatch-hardened-/);
+      assert.equal(fromApp(`./${path}/package.json`).name, '@crateview/picomatch-hardened', path);
       const match = fromApp(`./${path}`);
       assert.throws(() => match.makeRe('+(jpg|png)'), /Repeated extglobs are disabled/, path);
     }

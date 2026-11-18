@@ -1,4 +1,11 @@
 {
+  "garbageCollection": "垃圾回收",
+  "garbageCollectionStart": "运行垃圾回收",
+  "garbageCollectionWarning": "此操作影响整个镜像仓库服务，可能会中断写入。",
+  "garbageCollectionRunning": "垃圾回收正在运行。",
+  "garbageCollectionSucceeded": "垃圾回收已完成。",
+  "garbageCollectionFailed": "垃圾回收失败。请检查维护任务。",
+  "garbageCollectionUnknown": "垃圾回收状态未知。再次启动前请检查维护任务。",
   "settings": "设置",
   "settingsDescription": "自定义工作区的外观和语言。",
   "themeDescription": "选择浅色、深色或遵循您的系统外观。",

@@ -11,7 +11,7 @@
 - Published images remain `ghcr.io/crateview/registry-ui` and `ghcr.io/crateview/website`, each with its existing version-label format `vX.Y.Z` and existing deployment channels. Registry Git tags remain `vX.Y.Z`; new website Git tags use `website-vX.Y.Z`.
 - Registry UI and auth API, config keys, data paths, Compose profiles/overlays and image runtime entrypoints are unchanged. Repository-relative build commands are updated; existing pulled-image deployment configuration remains valid.
 - Canonical source is `https://github.com/crateview/crateview`. Verify redirects for existing registry issues and releases; use explicit image names, not `${{ github.repository }}`.
-- The canonical repository and registry image remain public; the website image remains private. Website GitHub releases must not replace the registry's latest-release feed. Updating the website's `latest` image triggers Arcane and is a production action.
+- The canonical repository and registry image remain public; the website image remains private. Website GitHub releases must not replace the registry's latest-release feed. Updating the website's `latest` image is a production action.
 - New image versions are built from the monorepo. Legacy cleanup excludes deployed, documented, supported and rollback references, including all tags sharing a retained digest; it requires a separate approved list after the rollback window.
 
 ## Website and publication

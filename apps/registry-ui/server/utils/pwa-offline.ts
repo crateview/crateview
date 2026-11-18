@@ -75,7 +75,7 @@ document.getElementById('retry').addEventListener('click', () => location.reload
 </script></body></html>`;
 }
 
-/** Intercept app document navigation only, preserving HTTP responses and all protocol traffic. */
+/** Intercept app navigation only; registry and maintenance API requests always bypass the worker. */
 export function createPwaWorker(baseURL: string, name: string) {
   return `const base = ${JSON.stringify(pwaAssetUrl('', baseURL))};
 const offline = ${JSON.stringify(createOfflineDocument(name))};
