@@ -1,4 +1,11 @@
 {
+  "garbageCollection": "गार्बेज कलेक्शन",
+  "garbageCollectionStart": "गार्बेज कलेक्शन शुरू करें",
+  "garbageCollectionWarning": "इसका असर पूरी रजिस्ट्री पर पड़ता है और लिखने की प्रक्रिया रुक सकती है।",
+  "garbageCollectionRunning": "गार्बेज कलेक्शन चल रहा है।",
+  "garbageCollectionSucceeded": "गार्बेज कलेक्शन पूरा हुआ।",
+  "garbageCollectionFailed": "गार्बेज कलेक्शन विफल रहा। रखरखाव कार्य की जाँच करें।",
+  "garbageCollectionUnknown": "गार्बेज कलेक्शन की स्थिति अज्ञात है। दोबारा शुरू करने से पहले रखरखाव कार्य की जाँच करें।",
   "settings": "सेटिंग्स",
   "settingsDescription": "अपने कार्यक्षेत्र की उपस्थिति और भाषा को अनुकूलित करें।",
   "themeDescription": "हल्का, गहरा चुनें या अपने सिस्टम के स्वरूप का अनुसरण करें।",

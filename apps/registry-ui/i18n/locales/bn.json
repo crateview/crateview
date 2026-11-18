@@ -1,4 +1,11 @@
 {
+  "garbageCollection": "গার্বেজ কালেকশন",
+  "garbageCollectionStart": "গার্বেজ কালেকশন শুরু করুন",
+  "garbageCollectionWarning": "এটি পুরো রেজিস্ট্রিকে প্রভাবিত করে এবং লেখার কাজ সাময়িকভাবে বন্ধ করতে পারে।",
+  "garbageCollectionRunning": "গার্বেজ কালেকশন চলছে।",
+  "garbageCollectionSucceeded": "গার্বেজ কালেকশন সম্পন্ন হয়েছে।",
+  "garbageCollectionFailed": "গার্বেজ কালেকশন ব্যর্থ হয়েছে। রক্ষণাবেক্ষণের কাজটি পরীক্ষা করুন।",
+  "garbageCollectionUnknown": "গার্বেজ কালেকশনের অবস্থা অজানা। আবার শুরুর আগে রক্ষণাবেক্ষণের কাজটি পরীক্ষা করুন।",
   "settings": "সেটিংস",
   "settingsDescription": "আপনার কর্মক্ষেত্রের চেহারা এবং ভাষা কাস্টমাইজ করুন।",
   "themeDescription": "হালকা, অন্ধকার বেছে নিন বা আপনার সিস্টেমের চেহারা অনুসরণ করুন।",
