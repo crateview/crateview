@@ -2,7 +2,7 @@ import { deepEqual, equal, throws } from 'node:assert/strict';
 import { test } from 'node:test';
 import { releasePlan } from './release-plan.mjs';
 
-const main = { enabled: 'true', branch: 'refs/heads/main' };
+const main = { branch: 'refs/heads/main' };
 
 test('independent app versions have different Git tags and stable image names', () => {
   const tags = ['v0.9.0'];
@@ -23,17 +23,13 @@ test('baseline and stale versions do not publish; a tag without a release is rec
   throws(() => releasePlan('website', '0.4.11-beta.1', [], [], false, main));
 });
 
-test('the production gate must be enabled on main for both apps', () => {
+test('pending changes create a version PR on main but never publish that app in the same run', () => {
   for (const app of ['registry-ui', 'website']) {
-    for (const config of [
-      { ...main, enabled: '' },
-      { ...main, branch: 'refs/heads/demo' },
-    ]) {
-      for (const pending of [true, false]) {
-        const plan = releasePlan(app, '1.0.0', [], [], pending, config);
-        deepEqual([plan.versionPr, plan.build, plan.release], [false, false, false]);
-      }
+    for (const pending of [true, false]) {
+      const plan = releasePlan(app, '1.0.0', [], [], pending, { branch: 'refs/heads/demo' });
+      deepEqual([plan.versionPr, plan.build, plan.release], [false, false, false]);
     }
-    equal(releasePlan(app, '1.0.0', [], [], true, main).versionPr, true);
+    const plan = releasePlan(app, '1.0.0', [], [], true, main);
+    deepEqual([plan.versionPr, plan.build, plan.release], [true, false, false]);
   }
 });

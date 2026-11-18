@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   promote:
-    if: github.ref == 'refs/heads/main' && vars.CRATEVIEW_MONOREPO_PUBLISH == 'true'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     concurrency:

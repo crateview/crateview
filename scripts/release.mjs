@@ -3,11 +3,11 @@ import { mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
-import { apps, releasePlan } from './release-plan.mjs';
 import { requestPromotion } from '../apps/registry-ui/scripts/request-docs-promotion.mjs';
 import { assignWebsiteVersion } from './docs-publication.mjs';
+import { apps, releasePlan } from './release-plan.mjs';
 
-const config = { branch: process.env.GITHUB_REF, enabled: process.env.CRATEVIEW_MONOREPO_PUBLISH };
+const config = { branch: process.env.GITHUB_REF };
 const get = (program, args) => execFileSync(program, args, { encoding: 'utf8' }).trim();
 const run = (program, args) => execFileSync(program, args, { stdio: 'inherit' });
 const git = (...args) => get('git', args);
@@ -168,7 +168,7 @@ async function publish(app, plan) {
     run('gh', ['release', 'create', plan.tag, '--generate-notes', '--verify-tag', `--latest=${app === 'registry-ui'}`]);
 }
 
-if (config.enabled === 'true' && config.branch === 'refs/heads/main' && currentMain()) {
+if (config.branch === 'refs/heads/main' && currentMain()) {
   const tags = git('tag', '--list').split('\n');
   const releases = JSON.parse(
     gh('api', '--paginate', '--slurp', `repos/${process.env.GITHUB_REPOSITORY}/releases?per_page=100`),

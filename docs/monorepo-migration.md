@@ -36,7 +36,7 @@ Product guide sources and release templates were imported from the pinned [Crate
 
 ## Rollback prerequisites
 
-- Leave `CRATEVIEW_MONOREPO_PUBLISH` unset during development and staging. Enabling production publishing is part of the separately approved cutover, not an implementation or merge step.
+- Use an isolated environment for staging. In the production repository, release and docs-promotion automation runs on `main` without an enablement variable; version and promotion PRs still require manual review and merge.
 - Record known-good running digests, effective deployment inputs, and current publication owners in the restricted operator record. Verify staging can pull both retained digests using the expected access.
 - Set the rollback window and retain both packages, their supported tag references, and the known-good digests. Check for shared manifests and retain uncertain artifacts.
 - Rehearse pausing automatic website updates and pinning the previous digest. Rehearse restoring the registry UI separately without removing its data or account volumes.
@@ -47,7 +47,7 @@ Product guide sources and release templates were imported from the pinned [Crate
 1. Record both running image digests and the recent versioned images in the restricted operator record. Confirm the repository rename target is available. Pause website auto-updates and agree on a rollback window before touching publishers.
 2. Reconcile or explicitly retire all legacy promotion receipts. Pause legacy website release and promotion workflows once their queues are stable. Keep source repos, audited history and usable rollback images intact.
 3. Rename the public registry repository in place to `crateview/crateview`. Update remotes and integrations; check required CI, old issue and release redirects, existing issue/PR IDs, releases and Git tags against the baseline.
-4. Verify CI can write both existing GHCR packages. Check a public registry pull and both an authenticated pull and anonymous denial for website. Do not change image visibility. Enable `CRATEVIEW_MONOREPO_PUBLISH` only with operator approval. Review both version PRs separately. Confirm each version was built from the monorepo and smoke-tested by digest before promotion; verify website stable, archived and `next` routes before resuming auto-updates.
+4. Verify CI can write both existing GHCR packages. Check a public registry pull and both an authenticated pull and anonymous denial for website. Do not change image visibility. Review both version PRs separately. Confirm each version was built from the monorepo and smoke-tested by digest before promotion; verify website stable, archived and `next` routes before resuming auto-updates.
 5. Exercise rollback first in staging. If live rollback is required, disable new writers and website auto-updates, pin and recreate only the affected app at its previously recorded digest, and leave data volumes alone. Reconcile publication records before re-enabling a writer.
 
 ### Legacy image retention
@@ -57,6 +57,6 @@ After the approved rollback window expires, inventory old GHCR tags, digests and
 ## Pre-cutover verification
 
 - Clean-checkout run at `23be8d2` using Node `26.13.1`: setup, type/lint/format, unit/auth tests, both app and Docker builds, registry production-image auth, Distribution monitoring, PWA, branding, integrated/basic/token browser and Docker integration, and all 65 website browser tests passed.
-- Temporary same-series and new-series promotion rehearsals generated fresh screenshots. Repeating the new-series promotion was a no-op; the unrelated archive was unchanged. The container capture path used a locally built revision-labeled image in place of the external digest pull. Release command fixtures verified that the closed gate and a rejected image revision do not advance `latest` or create a release.
+- Temporary same-series and new-series promotion rehearsals generated fresh screenshots. Repeating the new-series promotion was a no-op; the unrelated archive was unchanged. The container capture path used a locally built revision-labeled image in place of the external digest pull. Release command fixtures verified that a rejected image revision does not advance `latest` or create a release.
 - Local website rollback rehearsal: rebuilt the approved website baseline and its pinned docs; checked both the monorepo candidate and the baseline by immutable local image ID. The stable redirect, German archive and unpublished-route 404 held across rollback.
 - The public registry baseline digest resolves. Anonymous inspection of the private website image was denied. Authenticated GHCR access and post-rename redirects remain hosted handoff checks; local image IDs are not production rollback digests.
