@@ -29,7 +29,7 @@ No shared infrastructure changes. Verify the feature pointer and issue checklist
 
 ## Final Phase: Feature-Wide Validation and Release Metadata
 
-- [ ] T004 Complete code-side checks in `specs/003-website-release-identity/quickstart.md` and record their results and any pending hosted evidence. Use the app-local Changesets CLI to create and separately commit one patch changeset under `apps/website/.changeset/` for the two code increments. Do not run version, release, publish, or deploy commands.
+- [X] T004 Complete code-side checks in `specs/003-website-release-identity/quickstart.md` and record their results and any pending hosted evidence. Use the app-local Changesets CLI to create and separately commit one patch changeset under `apps/website/.changeset/` for the two code increments. Do not run version, release, publish, or deploy commands.
 
 ## Dependencies & Execution Order
 
