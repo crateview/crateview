@@ -25,11 +25,14 @@ onMounted(() => {
 })
 onBeforeUnmount(() => revealObserver?.disconnect())
 const installTab = ref('compose')
-const command = computed(() =>
-  installTab.value === 'compose'
-    ? `git clone https://github.com/crateview/registry-ui.git\ncd registry-ui\ngit checkout ${getDocVersion(stableDocVersion)!.release}\nexport CRATEVIEW_VERSION=${getDocVersion(stableDocVersion)!.release}\ndocker compose pull\ndocker compose up -d`
-    : `git clone https://github.com/crateview/registry-ui.git\ncd registry-ui\ngit checkout ${getDocVersion(stableDocVersion)!.release}\nnpm ci\nNUXT_REGISTRY_UPSTREAM=http://127.0.0.1:5000 npm run dev`,
-)
+const command = computed(() => {
+  const stable = getDocVersion(stableDocVersion)!
+  const clone = `git clone https://github.com/crateview/crateview.git\ncd crateview\ngit checkout ${stable.release}`
+  const app = stable.docsRevision === stable.revision ? '\ncd apps/registry-ui' : ''
+  return installTab.value === 'compose'
+    ? `${clone}${app}\nexport CRATEVIEW_VERSION=${stable.release}\ndocker compose pull\ndocker compose up -d`
+    : `${clone}${app}\nnpm ci\nNUXT_REGISTRY_UPSTREAM=http://127.0.0.1:5000 npm run dev`
+})
 const features = [
   { key: 'Search', icon: 'i-lucide-search' },
   { key: 'Layers', icon: 'i-lucide-layers-3' },

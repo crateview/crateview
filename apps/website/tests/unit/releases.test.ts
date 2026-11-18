@@ -16,6 +16,7 @@ describe('public release feed', () => {
       },
       { tag_name: 'v0.11.0', draft: true },
       { tag_name: 'v0.12.0-beta.1', prerelease: true },
+      { tag_name: 'website-v0.10.0', name: 'Website', body: 'Not registry release notes' },
       { tag_name: '../unsafe' },
     ]
     const fetcher = vi.fn<typeof fetch>().mockResolvedValue(new Response(JSON.stringify(entries)))
@@ -24,10 +25,20 @@ describe('public release feed', () => {
     expect(releases[0]).toMatchObject({
       title: 'Next stable',
       markdown: '## Changes\nFixed navigation.',
-      url: 'https://github.com/crateview/registry-ui/releases/tag/v0.10.0',
+      url: 'https://github.com/crateview/crateview/releases/tag/v0.10.0',
     })
     expect(releases[1]).toMatchObject({ title: 'v0.9.0', markdown: '' })
     expect(fetcher).toHaveBeenCalledOnce()
+  })
+
+  it('uses the old feed only until the repository rename is visible', async () => {
+    const fetcher = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(new Response('', { status: 404 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify([{ tag_name: 'v0.8.2' }])))
+    const [release] = await fetchReleases(fetcher)
+    expect(release?.url).toContain('/registry-ui/releases/tag/')
+    expect(fetcher).toHaveBeenCalledTimes(2)
   })
 
   it('surfaces upstream errors and empty release feeds', async () => {

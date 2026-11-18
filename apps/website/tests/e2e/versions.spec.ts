@@ -14,7 +14,7 @@ for (const version of docVersions) {
         const html = await response.text()
         expect(html).toContain(`href="https://crateview.de${path}"`)
         expect(html).toContain(
-          `https://github.com/crateview/docs/edit/main/${locale.code}/docs/${version.id}/${slug}.md`,
+          `https://github.com/crateview/crateview/edit/main/docs/${locale.code}/docs/${version.id}/${slug}.md`,
         )
         expect(html.includes('content="noindex, follow"')).toBe(version.id === 'next')
       }

@@ -3,7 +3,7 @@
 Crateview is a web interface for Docker and OCI container registries.
 
 - [Registry UI](apps/registry-ui/README.md): development, Compose deployment, and account management.
-- [Website source](apps/website/) and [versioned docs source](docs/README.md).
+- [Website source](apps/website/) and [versioned docs source](docs/README.md). Canonical GitHub repository after cutover: [`crateview/crateview`](https://github.com/crateview/crateview).
 - [Product website and docs](https://crateview.de)
 - [Coding guidelines](docs/coding-guidelines.md) · [Security](SECURITY.md)
 

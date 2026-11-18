@@ -36,7 +36,7 @@ const navigation = computed(() => [
 const toc = computed(() => page.value?.body?.toc?.links || [])
 const editUrl = computed(
   () =>
-    `https://github.com/crateview/docs/edit/main/${locale.value}/docs/${version.value!.id}/${slug.value}.md`,
+    `https://github.com/crateview/crateview/edit/main/docs/${locale.value}/docs/${version.value!.id}/${slug.value}.md`,
 )
 useHead(() => ({
   title: `${page.value?.title} · ${version.value!.id}`,

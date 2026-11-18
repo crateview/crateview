@@ -104,7 +104,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', shortcut))
               class="text-muted hover:text-highlighted"
               >{{ t('getStarted') }}</NuxtLink
             ><a
-              href="https://github.com/crateview/docs"
+              href="https://github.com/crateview/crateview/tree/main/docs"
               target="_blank"
               rel="noopener noreferrer"
               class="text-muted hover:text-highlighted"
@@ -126,7 +126,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', shortcut))
               class="text-muted hover:text-highlighted"
               >{{ t('sourceCode') }}</a
             ><a
-              href="https://github.com/crateview/registry-ui/security/policy"
+              href="https://github.com/crateview/crateview/security/policy"
               target="_blank"
               rel="noopener noreferrer"
               class="text-muted hover:text-highlighted"
