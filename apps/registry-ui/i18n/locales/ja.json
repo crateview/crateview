@@ -1,4 +1,11 @@
 {
+  "garbageCollection": "ガベージコレクション",
+  "garbageCollectionStart": "ガベージコレクションを実行",
+  "garbageCollectionWarning": "この操作はレジストリ全体に影響し、書き込みが中断される場合があります。",
+  "garbageCollectionRunning": "ガベージコレクションを実行中です。",
+  "garbageCollectionSucceeded": "ガベージコレクションが完了しました。",
+  "garbageCollectionFailed": "ガベージコレクションに失敗しました。メンテナンスジョブを確認してください。",
+  "garbageCollectionUnknown": "ガベージコレクションの状態は不明です。再実行する前にメンテナンスジョブを確認してください。",
   "settings": "設定",
   "settingsDescription": "ワークスペースの外観と言語をカスタマイズします。",
   "themeDescription": "明るい、暗いを選択するか、システムの外観に従ってください。",

@@ -1,4 +1,11 @@
 {
+  "garbageCollection": "Coleta de lixo",
+  "garbageCollectionStart": "Executar coleta de lixo",
+  "garbageCollectionWarning": "Isso afeta todo o registro e pode interromper as gravações.",
+  "garbageCollectionRunning": "A coleta de lixo está em andamento.",
+  "garbageCollectionSucceeded": "A coleta de lixo foi concluída.",
+  "garbageCollectionFailed": "A coleta de lixo falhou. Verifique a tarefa de manutenção.",
+  "garbageCollectionUnknown": "O status da coleta de lixo é desconhecido. Verifique a tarefa de manutenção antes de iniciar novamente.",
   "settings": "Configurações",
   "settingsDescription": "Personalize a aparência e o idioma do seu espaço de trabalho.",
   "themeDescription": "Escolha claro, escuro ou siga a aparência do seu sistema.",

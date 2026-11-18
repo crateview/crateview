@@ -1,4 +1,11 @@
 {
+  "garbageCollection": "Collecte des données inutilisées",
+  "garbageCollectionStart": "Lancer la collecte des données inutilisées",
+  "garbageCollectionWarning": "Cette action concerne tout le registre et peut interrompre les écritures.",
+  "garbageCollectionRunning": "La collecte des données inutilisées est en cours.",
+  "garbageCollectionSucceeded": "La collecte des données inutilisées est terminée.",
+  "garbageCollectionFailed": "La collecte a échoué. Vérifiez la tâche de maintenance.",
+  "garbageCollectionUnknown": "L’état de la collecte est inconnu. Vérifiez la tâche de maintenance avant de relancer la collecte.",
   "settings": "Paramètres",
   "settingsDescription": "Personnalisez l'apparence et la langue de votre espace de travail.",
   "themeDescription": "Choisissez clair, sombre ou suivez l’apparence de votre système.",

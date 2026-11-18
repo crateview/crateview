@@ -36,7 +36,9 @@ Keep the integration disabled unless the job targets the same registry as Cratev
 
 The start API acknowledges job acceptance, not completion. Read the job status after a conflict or an uncertain response instead of resubmitting. The adapter must retain authoritative status and must refuse to collect if write protection cannot be established.
 
-Set `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true`, set `NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` to the exact managed usernames allowed to run it, and configure `NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` and `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN` on the Crateview server. The adapter must implement the [start/status contract](https://github.com/crateview/crateview/issues/74). Do not put the adapter token in browser configuration.
+Set `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true`, set `NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` to the exact managed usernames allowed to run it, and configure `NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` and `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN` on the Crateview server. The adapter must implement the [start/status contract](https://github.com/crateview/crateview/blob/main/specs/003-registry-garbage-collection/contracts/garbage-collection.md). Do not put the adapter token in browser configuration.
+
+Sign in as an allowed operator, open **Settings**, and select **Run garbage collection**. Confirm only when the maintenance window allows it. The card shows when the job is running, completed, failed, or its status is unknown. If Crateview cannot verify the result, check the maintenance job directly before starting again.
 
 Back up your registry storage and its configuration using a method appropriate to the storage driver. Keep volumes when replacing containers. Follow Distribution's instructions for garbage collection and write coordination:
 

@@ -1,4 +1,11 @@
 {
+  "garbageCollection": "جمع البيانات غير المستخدمة",
+  "garbageCollectionStart": "بدء جمع البيانات غير المستخدمة",
+  "garbageCollectionWarning": "يؤثر هذا على السجل بأكمله وقد يوقف عمليات الكتابة مؤقتًا.",
+  "garbageCollectionRunning": "جارٍ جمع البيانات غير المستخدمة.",
+  "garbageCollectionSucceeded": "اكتمل جمع البيانات غير المستخدمة.",
+  "garbageCollectionFailed": "فشل جمع البيانات غير المستخدمة. تحقق من مهمة الصيانة.",
+  "garbageCollectionUnknown": "حالة جمع البيانات غير المستخدمة غير معروفة. تحقق من مهمة الصيانة قبل البدء مجددًا.",
   "settings": "إعدادات",
   "settingsDescription": "قم بتخصيص مظهر ولغة مساحة العمل الخاصة بك.",
   "themeDescription": "اختر فاتحًا أو داكنًا أو اتبع مظهر نظامك.",

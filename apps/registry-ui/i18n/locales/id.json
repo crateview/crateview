@@ -1,4 +1,11 @@
 {
+  "garbageCollection": "Pembersihan data tak terpakai",
+  "garbageCollectionStart": "Jalankan pembersihan data tak terpakai",
+  "garbageCollectionWarning": "Tindakan ini memengaruhi seluruh registry dan dapat menghentikan penulisan sementara.",
+  "garbageCollectionRunning": "Pembersihan data tak terpakai sedang berjalan.",
+  "garbageCollectionSucceeded": "Pembersihan data tak terpakai selesai.",
+  "garbageCollectionFailed": "Pembersihan data gagal. Periksa tugas pemeliharaan.",
+  "garbageCollectionUnknown": "Status pembersihan tidak diketahui. Periksa tugas pemeliharaan sebelum memulai lagi.",
   "settings": "Pengaturan",
   "settingsDescription": "Sesuaikan tampilan dan bahasa ruang kerja Anda.",
   "themeDescription": "Pilih terang, gelap, atau ikuti tampilan sistem Anda.",
