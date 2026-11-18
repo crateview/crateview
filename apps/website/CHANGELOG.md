@@ -1,5 +1,15 @@
 # @crateview/website
 
+## 0.4.11
+
+### Patch Changes
+
+- 0b3e135: Harden installed glob matchers by disabling repeated extglobs until an upstream fix is available.
+- a54c87d: Build the website and versioned documentation from the Crateview monorepo, without a docs submodule. Existing documentation URLs and the website image name are unchanged.
+- 581a20e: Install the hardened glob matcher directly, including when lifecycle scripts are disabled.
+- 1ecd685: Update the website dependencies to receive published Nuxt and node-forge security fixes.
+- 8805699: Show the website build version in the footer and identify the Crateview monorepo as the container image source.
+
 ## 0.4.8
 
 ### Patch Changes
