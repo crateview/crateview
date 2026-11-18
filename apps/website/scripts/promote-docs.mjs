@@ -13,7 +13,14 @@ export function validateRequest(request) {
   releaseVersion(request.tag)
   for (const key of ['registryRevision', 'docsRevision'])
     if (!/^[a-f0-9]{40}$/.test(request[key])) throw new Error(`Invalid ${key}`)
-  if (request.schema !== 1) throw new Error('Unsupported promotion request schema')
+  if (
+    request.schema !== 1 &&
+    (request.schema !== 2 ||
+      request.docsRevision !== request.registryRevision ||
+      request.docsPath !== 'docs' ||
+      !/^sha256:[a-f0-9]{64}$/.test(request.imageDigest))
+  )
+    throw new Error('Invalid monorepo promotion request')
   return request
 }
 export function promotionState(manifest, request) {
@@ -117,6 +124,13 @@ export async function promoteDocs({ source, target, request }) {
         )
         .replaceAll(sourceRevision, request.registryRevision)
         .replaceAll('{{RELEASE_TAG}}', request.tag)
+      if (request.schema === 2)
+        text = text
+          .replaceAll(
+            'https://github.com/crateview/registry-ui',
+            'https://github.com/crateview/crateview',
+          )
+          .replaceAll('cd registry-ui\n', 'cd crateview/apps/registry-ui\n')
       if (/\/docs\/next\/|crateview-registry-ui:next|<!-- release:|\{\{[A-Z_]+\}\}/.test(text))
         throw new Error(`Unresolved preview content ${locale}/${slug}`)
       for (const [, link] of text.matchAll(/\]\((\/(?:[A-Za-z-]+\/)?docs\/[^)#]+)(?:#[^)]*)?\)/g)) {

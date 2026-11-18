@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { apps, releasePlan } from './release-plan.mjs';
+import { requestPromotion } from '../apps/registry-ui/scripts/request-docs-promotion.mjs';
 
 const config = { branch: process.env.GITHUB_REF, enabled: process.env.CRATEVIEW_MONOREPO_PUBLISH };
 const get = (program, args) => execFileSync(program, args, { encoding: 'utf8' }).trim();
@@ -151,5 +152,19 @@ if (config.enabled === 'true' && config.branch === 'refs/heads/main' && currentM
     const plan = releasePlan(app, version, tags, releases, pending, config);
     if (plan.versionPr) versionPr(app, directory);
     else if (plan.build || plan.release) await publish(app, plan);
+  }
+  const registry = apps['registry-ui'];
+  for (const tag of git('tag', '--list', 'v*').split('\n')) {
+    const version = tag.slice(1);
+    if (!/^\d+\.\d+\.\d+$/.test(version)) continue;
+    const [major, minor, patch] = version.split('.').map(Number);
+    if (major === 0 && (minor < 8 || (minor === 8 && patch <= 2))) continue;
+    const release = JSON.parse(gh('api', `repos/${process.env.GITHUB_REPOSITORY}/releases/tags/${tag}`));
+    if (release.assets.some((asset) => asset.name === 'docs-promotion.json')) continue;
+    const ref = `ghcr.io/crateview/registry-ui:${registry.prefix}${version}`;
+    const digest = JSON.parse(
+      get('docker', ['buildx', 'imagetools', 'inspect', '--format', '{{json .Manifest}}', ref]),
+    ).digest;
+    await requestPromotion(tag, digest);
   }
 }

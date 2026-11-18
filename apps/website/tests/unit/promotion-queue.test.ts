@@ -19,6 +19,7 @@ async function queue(
   recorded: Record<string, object> = {},
   moveTag = false,
   published = false,
+  monorepo = false,
 ) {
   const root = await mkdtemp(join(tmpdir(), 'docs-queue-test-'))
   roots.push(root)
@@ -35,7 +36,15 @@ async function queue(
     })),
   }
   tags.forEach((tag, id) => {
-    answers['repos/crateview/registry-ui/releases/assets/' + id] = receipt(tag)
+    answers['repos/crateview/registry-ui/releases/assets/' + id] = monorepo
+      ? {
+          ...receipt(tag),
+          schema: 2,
+          docsRevision: receipt(tag).registryRevision,
+          docsPath: 'docs',
+          imageDigest: 'sha256:' + 'd'.repeat(64),
+        }
+      : receipt(tag)
     answers['repos/crateview/registry-ui/commits/' + tag] = {
       sha: (moveTag ? 'c' : 'a').repeat(40),
     }
@@ -58,6 +67,9 @@ async function queue(
         env: {
           ...process.env,
           DOCS_MANIFEST: join(root, 'content/versions.json'),
+          DOCS_PUBLICATIONS: join(root, 'docs-publications.json'),
+          GITHUB_REPOSITORY: 'crateview/registry-ui',
+          MONOREPO_PROMOTION: String(monorepo),
           PATH: root + ':' + process.env.PATH,
           REQUEST_FILE: file,
           GITHUB_OUTPUT: join(root, 'output'),
@@ -96,4 +108,15 @@ it('skips older requests without rolling back stable', async () => {
   const { run, file } = await queue(['v0.4.9'])
   run()
   await expect(readFile(file)).rejects.toThrow()
+})
+
+it('selects a pinned monorepo release and waits for its reviewed website version', async () => {
+  const first = await queue(['v0.7.0', 'v0.6.0'], {}, false, false, true)
+  first.run()
+  const selected = JSON.parse(await readFile(first.file, 'utf8'))
+  expect(selected).toMatchObject({ tag: 'v0.6.0', schema: 2, docsPath: 'docs' })
+  expect(selected.docsRevision).toBe(selected.registryRevision)
+  const waiting = await queue(['v0.7.0', 'v0.6.0'], { 'v0.6.0': selected }, false, false, true)
+  waiting.run()
+  await expect(readFile(waiting.file)).rejects.toThrow()
 })
