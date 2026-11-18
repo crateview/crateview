@@ -15,7 +15,7 @@ Paths are repository-relative. Use the Node version in `.nvmrc`, npm, and the ex
 
 **Independent test**: Merged app versions use distinct Docker streams, and a promoted docs receipt records the bumped website version.
 
-- [ ] T003 [US2] Integrate and test docs receipt version assignment in `scripts/version-packages.mjs` and `scripts/docs-publication.test.mjs`; verify release and image separation in `scripts/release-dry-run.test.mjs`, and update `docs/monorepo-migration.md` with the manual handoff and rollback constraints.
+- [X] T003 [US2] Integrate and test docs receipt version assignment in `scripts/version-packages.mjs` and `scripts/docs-publication.test.mjs`; verify release and image separation in `scripts/release-dry-run.test.mjs`, and update `docs/monorepo-migration.md` with the manual handoff and rollback constraints.
 
 ## Cross-Cutting Validation
 
