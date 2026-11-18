@@ -1,0 +1,7 @@
+services:
+  website:
+    image: crateview-website:local
+    build:
+      context: ../..
+      dockerfile: apps/website/Dockerfile
+    pull_policy: build

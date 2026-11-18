@@ -1,0 +1,34 @@
+{
+  "version": "v0.7",
+  "revision": "5847d7c50dd1744175fab26f18604b359732389c",
+  "release": "v0.7.0",
+  "viewport": {
+    "width": 1360,
+    "height": 880
+  },
+  "locale": "en-US",
+  "capturedAt": "2026-11-02T23:45:12.544Z",
+  "fixtureImage": "alpine@sha256:3d67941fed5ae436b2bb9791cb3f50a252441c7706bbc5b4e738936df8ff8306",
+  "files": [
+    "repositories-light.webp",
+    "repositories-dark.webp",
+    "image-light.webp",
+    "image-dark.webp",
+    "monitoring-light.webp",
+    "monitoring-dark.webp",
+    "settings-light.webp",
+    "settings-dark.webp",
+    "users-light.webp",
+    "users-dark.webp",
+    "account-light.webp",
+    "account-dark.webp",
+    "login-light.webp",
+    "login-dark.webp",
+    "user-actions-light.webp",
+    "user-actions-dark.webp",
+    "user-password-light.webp",
+    "user-password-dark.webp",
+    "user-delete-light.webp",
+    "user-delete-dark.webp"
+  ]
+}

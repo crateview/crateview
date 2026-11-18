@@ -1,0 +1,17 @@
+{
+  "version": "v0.1",
+  "revision": "18e3876904587f6d53480d9d38b67ac3ed195318",
+  "release": "v0.1.2",
+  "viewport": {
+    "width": 1360,
+    "height": 880
+  },
+  "locale": "en-US",
+  "capturedAt": "2026-11-02T12:25:43.562Z",
+  "files": [
+    "repositories-light.webp",
+    "repositories-dark.webp",
+    "image-light.webp",
+    "image-dark.webp"
+  ]
+}

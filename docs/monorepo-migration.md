@@ -32,6 +32,8 @@ The owner approved publishing the 235-file allowlist from the pinned website com
 
 The exact allowlist is the pinned Git tree's file paths minus those exclusions. A credential-signature scan of the approved blobs found no matches; this is not a substitute for verifying that the import uses exactly that tree and scope.
 
+Product guide sources and release templates were imported from the pinned [Crateview docs tree](https://github.com/crateview/docs/tree/52a7be3122b01ab0d81d698b9286f201f36b5a45), excluding its GitHub issue templates. `docs/versions.json` remains the version manifest; the website's public captures and third-party notices retain their original locations relative to the app.
+
 ## Rollback prerequisites
 
 - Leave `CRATEVIEW_MONOREPO_PUBLISH` unset during development and staging. Enabling production publishing is part of the separately approved cutover, not an implementation or merge step.
