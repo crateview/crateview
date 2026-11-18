@@ -21,6 +21,19 @@ const guard = [
 
 const directory = mkdtempSync(join(tmpdir(), 'crateview-picomatch-'));
 const run = (file, args) => execFileSync(file, args, { cwd: directory, encoding: 'utf8' });
+const archiveEntries = (path) => run('tar', ['-tzf', path]).trim().split('\n').sort();
+const archiveContents = (path, entry) => execFileSync('tar', ['-xOzf', path, entry]);
+
+// npm pack can encode different gzip metadata on different platforms.
+function verifyArchive(target, generated) {
+  const entries = archiveEntries(generated);
+  if (
+    archiveEntries(target).join('\n') !== entries.join('\n') ||
+    entries.some((entry) => !archiveContents(target, entry).equals(archiveContents(generated, entry)))
+  ) {
+    throw new Error(`Hardened package does not match its sources: ${target}`);
+  }
+}
 
 try {
   for (const [version, integrity] of Object.entries(upstream)) {
@@ -47,9 +60,7 @@ try {
     for (const app of ['registry-ui', 'website']) {
       const target = fileURLToPath(new URL(`../apps/${app}/vendor/${hardened}`, import.meta.url));
       if (process.argv.includes('--check')) {
-        if (!readFileSync(target).equals(readFileSync(join(directory, hardened)))) {
-          throw new Error(`Hardened package does not match its sources: ${target}`);
-        }
+        verifyArchive(target, join(directory, hardened));
       } else {
         copyFileSync(join(directory, hardened), target);
       }
