@@ -19,7 +19,7 @@ Paths are repository-relative. Use the Node version in `.nvmrc`, npm, and the ex
 
 ## Cross-Cutting Validation
 
-- [ ] T004 Record results in `specs/005-unify-version-packages/quickstart.md`, including preserved pending-entry contents, required CI routing, workflow lint, and no production actions. Apply the Changesets policy without inventing a package version bump.
+- [X] T004 Record results in `specs/005-unify-version-packages/quickstart.md`, including preserved pending-entry contents, required CI routing, workflow lint, and no production actions. Apply the Changesets policy without inventing a package version bump.
 
 ## Dependencies and Strategy
 

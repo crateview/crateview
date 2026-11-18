@@ -66,13 +66,19 @@ for (const pending of [[], ['registry-ui'], ['website'], apps]) {
         stdio: 'pipe',
       });
     run('git', ['init', '-b', 'main']);
-    run('git', ['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', 'commit', '--allow-empty', '-m', 'Fixture']);
+    run('git', [
+      '-c',
+      'user.name=Fixture',
+      '-c',
+      'user.email=fixture@example.invalid',
+      'commit',
+      '--allow-empty',
+      '-m',
+      'Fixture',
+    ]);
     run('npm', ['run', 'changeset', '--', 'status', '--output', 'plan.json']);
     const plan = JSON.parse(readFileSync(join(dir, 'plan.json'), 'utf8'));
-    deepEqual(
-      plan.releases.map(({ name }) => name).sort(),
-      pending.map((app) => `@crateview/${app}`).sort(),
-    );
+    deepEqual(plan.releases.map(({ name }) => name).sort(), pending.map((app) => `@crateview/${app}`).sort());
     if (pending.length) run(process.execPath, ['scripts/version-packages.mjs']);
     for (const app of apps) {
       const files = ['package.json', 'package-lock.json'].map((file) =>

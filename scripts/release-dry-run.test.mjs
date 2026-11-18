@@ -117,7 +117,9 @@ test('one merged Version Packages PR can publish two distinct container releases
   equal(result.status, 0, result.stderr);
   const calls = commands();
   deepEqual(
-    calls.filter(([tool, command, tag]) => tool === 'git' && command === 'tag' && tag !== '--list').map((args) => args[2]),
+    calls
+      .filter(([tool, command, tag]) => tool === 'git' && command === 'tag' && tag !== '--list')
+      .map((args) => args[2]),
     ['v0.9.0', 'website-v0.4.11'],
   );
   ok(calls.some((args) => args.includes('ghcr.io/crateview/registry-ui:v0.9.0')));
