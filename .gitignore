@@ -11,4 +11,4 @@ coverage
 !.env.example
 .DS_Store
 
-/public/dependency-licenses.json
+/apps/registry-ui/public/dependency-licenses.json

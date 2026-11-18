@@ -34,6 +34,7 @@ The exact allowlist is the pinned Git tree's file paths minus those exclusions. 
 
 ## Rollback prerequisites
 
+- Leave `CRATEVIEW_MONOREPO_PUBLISH` unset during development and staging. Enabling production publishing is part of the separately approved cutover, not an implementation or merge step.
 - Record known-good running digests, effective deployment inputs, and current publication owners in the restricted operator record. Verify staging can pull both retained digests using the expected access.
 - Set the rollback window and retain both packages, their supported tag references, and the known-good digests. Check for shared manifests and retain uncertain artifacts.
 - Rehearse pausing automatic website updates and pinning the previous digest. Rehearse restoring the registry UI separately without removing its data or account volumes.

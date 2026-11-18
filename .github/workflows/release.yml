@@ -17,10 +17,13 @@ jobs:
     uses: ./.github/workflows/ci.yml
 
   release:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && vars.CRATEVIEW_MONOREPO_PUBLISH == 'true'
     needs: checks
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: apps/registry-ui
     permissions:
       actions: write
       contents: write
@@ -36,12 +39,14 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: npm
+          cache-dependency-path: apps/registry-ui/package-lock.json
       - name: Install dependencies
         run: npm ci
       - name: Maintain release PR
         id: changesets
         uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2
         with:
+          cwd: apps/registry-ui
           version-script: npm run version
           github-token: ${{ github.token }}
           create-github-releases: false
@@ -104,7 +109,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6
         with:
-          images: ghcr.io/${{ github.repository }}
+          images: ghcr.io/crateview/registry-ui
           tags: |
             type=semver,pattern=v{{version}},value=${{ steps.state.outputs.version }}
             type=raw,value=latest
@@ -113,7 +118,7 @@ jobs:
         if: steps.state.outputs.build == 'true'
         uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7
         with:
-          context: .
+          context: apps/registry-ui
           platforms: linux/amd64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -131,7 +136,7 @@ jobs:
           if [ "$NEEDS_TAG" != 'true' ]; then
             printf '%s' "$GH_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
           fi
-          docker buildx imagetools inspect "ghcr.io/${GITHUB_REPOSITORY}:v$VERSION"
+          docker buildx imagetools inspect "ghcr.io/crateview/registry-ui:v$VERSION"
           if [ "$NEEDS_TAG" = 'true' ]; then
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'

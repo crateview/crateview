@@ -31,7 +31,7 @@ self-contained; CRM packages and tooling are not required.
 
 ## Verification
 
-Run from the registry-ui root with the Node version in `.nvmrc`:
+Run from `apps/registry-ui` with the Node version in the repository root's `.nvmrc`:
 
 ```sh
 npm run format
