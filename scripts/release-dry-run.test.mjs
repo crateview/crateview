@@ -6,14 +6,14 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-function releaseFixture(t, websiteVersion = '0.4.10') {
+function releaseFixture(t, websiteVersion = '0.4.10', registryVersion = '0.8.2') {
   const dir = mkdtempSync(join(tmpdir(), 'crateview-publish-plan-'));
   t.after(() => rmSync(dir, { recursive: true, force: true }));
   for (const [app, version] of [
-    ['registry-ui', '0.8.2'],
+    ['registry-ui', registryVersion],
     ['website', websiteVersion],
   ]) {
-    mkdirSync(join(dir, 'apps', app, '.changeset'), { recursive: true });
+    mkdirSync(join(dir, 'apps', app), { recursive: true });
     writeFileSync(join(dir, 'apps', app, 'package.json'), JSON.stringify({ version }));
   }
   const fixtures = `
@@ -33,14 +33,14 @@ if (tool === 'git') {
 } else if (tool === 'docker' && cmd === 'buildx' && sub === 'build') {
   writeFileSync(args[args.indexOf('--metadata-file') + 1], JSON.stringify({ 'containerimage.digest': digest }));
 } else if (cmd === 'buildx' && sub === 'imagetools' && detail === 'inspect') {
-  if (!existsSync('version-image')) { console.error('manifest unknown'); process.exit(1); }
+  if (!existsSync(args.at(-1).replaceAll('/', '_'))) { console.error('manifest unknown'); process.exit(1); }
   console.log(JSON.stringify({ digest }));
 } else if (cmd === 'buildx' && sub === 'imagetools' && detail === 'create') {
-  if (args.includes('ghcr.io/crateview/website:v0.4.11')) writeFileSync('version-image', digest);
+  writeFileSync(args[args.indexOf('--tag') + 1].replaceAll('/', '_'), digest);
 } else if (cmd === 'image' && sub === 'inspect') console.log(process.env.WRONG_IMAGE ? 'wrong-source' : revision);
 else if (cmd === 'run') console.log('fixture-container');
 `;
-  for (const tool of ['git', 'gh', 'docker', 'npm'])
+  for (const tool of ['git', 'gh', 'docker'])
     writeFileSync(join(dir, tool), `#!${process.execPath}\n${fixtures}`, { mode: 0o700 });
 
   const env = {
@@ -48,6 +48,7 @@ else if (cmd === 'run') console.log('fixture-container');
     PATH: `${dir}:${process.env.PATH}`,
     GITHUB_REF: 'refs/heads/main',
     GITHUB_REPOSITORY: 'crateview/crateview',
+    PENDING_RELEASE_PACKAGES: '[]',
   };
   delete env.CRATEVIEW_MONOREPO_PUBLISH;
   const run = (overrides = {}) =>
@@ -79,24 +80,12 @@ test('off-branch and stale runs do not write release state', (t) => {
   ]);
 });
 
-for (const pending of [['registry-ui'], ['website'], ['registry-ui', 'website']]) {
-  test(`creates version PRs without a publishing switch: ${pending.join(', ')}`, (t) => {
-    const { dir, run, commands } = releaseFixture(t);
-    for (const app of pending) writeFileSync(join(dir, 'apps', app, '.changeset', 'pending.md'), 'Pending change');
-
-    const result = run();
-    equal(result.status, 0, result.stderr);
-    const calls = commands();
-    const branches = calls
-      .filter(([tool, cmd, sub]) => tool === 'gh' && cmd === 'pr' && sub === 'create')
-      .map((args) => args[args.indexOf('--head') + 1]);
-    deepEqual(
-      branches,
-      pending.map((app) => `changeset-release/${app}`),
-    );
-    ok(!calls.some(([tool, cmd]) => tool === 'docker' || (tool === 'gh' && cmd === 'release')));
-  });
-}
+test('pending website changes prevent publication and the container script never creates a PR', (t) => {
+  const { run, commands } = releaseFixture(t, '0.4.11');
+  const result = run({ PENDING_RELEASE_PACKAGES: '["@crateview/website"]' });
+  equal(result.status, 0, result.stderr);
+  ok(!commands().some(([tool, cmd]) => tool === 'docker' || (tool === 'gh' && ['release', 'pr'].includes(cmd))));
+});
 
 test('website publication verifies the digest and keeps the registry release stream untouched', (t) => {
   const { run, commands } = releaseFixture(t, '0.4.11');
@@ -120,4 +109,19 @@ test('website publication verifies the digest and keeps the registry release str
   const release = calls.find((args) => args[0] === 'gh' && args[1] === 'release');
   match(release.join(' '), /website-v0.4.11 .*--latest=false/);
   ok(!calls.some((args) => args.join(' ').includes('ghcr.io/crateview/registry-ui:')));
+});
+
+test('one merged Version Packages PR can publish two distinct container releases', (t) => {
+  const { run, commands } = releaseFixture(t, '0.4.11', '0.9.0');
+  const result = run();
+  equal(result.status, 0, result.stderr);
+  const calls = commands();
+  deepEqual(
+    calls
+      .filter(([tool, command, tag]) => tool === 'git' && command === 'tag' && tag !== '--list')
+      .map((args) => args[2]),
+    ['v0.9.0', 'website-v0.4.11'],
+  );
+  ok(calls.some((args) => args.includes('ghcr.io/crateview/registry-ui:v0.9.0')));
+  ok(calls.some((args) => args.includes('ghcr.io/crateview/website:v0.4.11')));
 });

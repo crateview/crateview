@@ -88,7 +88,7 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git switch -c "$BRANCH"
-          git add -- docs apps/website/public/images/docs apps/website/.changeset
+          git add -- docs apps/website/public/images/docs .changeset
           git commit -m "docs: promote ${BRANCH#*/}"
           old=$(git ls-remote origin "refs/heads/$BRANCH" | cut -f1)
           git push "--force-with-lease=refs/heads/$BRANCH:$old" origin "$BRANCH"

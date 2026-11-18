@@ -1,0 +1,4 @@
+{
+  "version": "independent",
+  "packages": ["apps/registry-ui", "apps/website"]
+}

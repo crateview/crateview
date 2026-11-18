@@ -23,7 +23,7 @@ export function recordPublication(root, request, capture) {
   ledger[request.tag] = { ...request, capture: `images/docs/${series}/capture.json` };
   writeFileSync(file, JSON.stringify(ledger, null, 2) + '\n');
   writeFileSync(
-    resolve(root, `apps/website/.changeset/docs-${request.tag}.md`),
+    resolve(root, `.changeset/docs-${request.tag}.md`),
     `---\n"@crateview/website": patch\n---\n\nPublish documentation and verified captures for registry UI ${request.tag}.\n`,
     { flag: 'wx' },
   );

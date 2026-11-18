@@ -47,8 +47,12 @@ Product guide sources and release templates were imported from the pinned [Crate
 1. Record both running image digests and the recent versioned images in the restricted operator record. Confirm the repository rename target is available. Pause website auto-updates and agree on a rollback window before touching publishers.
 2. Reconcile or explicitly retire all legacy promotion receipts. Pause legacy website release and promotion workflows once their queues are stable. Keep source repos, audited history and usable rollback images intact.
 3. Rename the public registry repository in place to `crateview/crateview`. Update remotes and integrations; check required CI, old issue and release redirects, existing issue/PR IDs, releases and Git tags against the baseline.
-4. Verify CI can write both existing GHCR packages. Check a public registry pull and both an authenticated pull and anonymous denial for website. Do not change image visibility. Review both version PRs separately. Confirm each version was built from the monorepo and smoke-tested by digest before promotion; verify website stable, archived and `next` routes before resuming auto-updates.
+4. Verify CI can write both existing GHCR packages. Check a public registry pull and both an authenticated pull and anonymous denial for website. Do not change image visibility. Review the shared `Version Packages` PR before merging. Confirm each affected app was built from the monorepo and smoke-tested by digest before promotion; verify website stable, archived and `next` routes before resuming auto-updates.
 5. Exercise rollback first in staging. If live rollback is required, disable new writers and website auto-updates, pin and recreate only the affected app at its previously recorded digest, and leave data volumes alone. Reconcile publication records before re-enabling a writer.
+
+### Shared version PR cutover
+
+Use root `.changeset/` as the source of pending version changes. Do not merge old app-specific version PRs: their changes were prepared against the former paths. The new `Version Packages` PR can bump one or both apps, but Docker image names, Git tag prefixes, and publication checks remain separate. No packages publish to npm. If reverting the migration after a shared version PR merged, reconcile the consumed entries, docs receipts, and already-published release tags before restoring any release writer.
 
 ### Legacy image retention
 
