@@ -12,7 +12,7 @@
     "check": "npm run check:registry-ui && npm run check:website",
     "check:registry-ui": "npm --prefix apps/registry-ui run typecheck && npm --prefix apps/registry-ui run lint && npm --prefix apps/registry-ui run format:check",
     "check:website": "npm --prefix apps/website run typecheck && npm --prefix apps/website run lint && npm --prefix apps/website run format:check",
-    "test": "node --test scripts/*.test.mjs && npm --prefix apps/registry-ui test && npm --prefix apps/registry-ui run test:auth && npm --prefix apps/website test",
+    "test": "node --test scripts/*.test.mjs scripts/checks/*.test.mjs && npm --prefix apps/registry-ui test && npm --prefix apps/registry-ui run test:auth && npm --prefix apps/website test",
     "build": "npm --prefix apps/registry-ui run build && npm --prefix apps/website run build"
   }
 }

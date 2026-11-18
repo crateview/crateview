@@ -36,6 +36,8 @@ jobs:
       - name: Validate monorepo release decisions
         run: node --test scripts/*.test.mjs
         working-directory: .
+      - name: Check picomatch hardening
+        run: node --test --test-name-pattern=registry-ui ../../scripts/checks/picomatch-hardening.test.mjs
       - name: Install account service dependencies
         run: npm ci --prefix auth
       - name: Check types
@@ -80,6 +82,8 @@ jobs:
           cache-dependency-path: apps/website/package-lock.json
       - name: Install dependencies
         run: npm ci
+      - name: Check picomatch hardening
+        run: node --test --test-name-pattern=website ../../scripts/checks/picomatch-hardening.test.mjs
       - name: Check types
         run: npm run typecheck
       - name: Lint
