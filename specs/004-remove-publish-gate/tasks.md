@@ -18,7 +18,7 @@ No additional setup or dependencies; reuse the existing workflow and test harnes
 
 **Independent test**: Docs promotion runs on `main` without a variable, and only an eligible pinned release can produce a promotion PR.
 
-- [ ] T002 [US2] Remove the variable from `.github/workflows/promote-docs.yml` without changing eligibility, revision verification, or branch checks; update `docs/monorepo-migration.md` and run `scripts/docs-publication.test.mjs` to verify that promotion still creates the website patch changeset. Direct docs edits without a changeset remain outside this scope.
+- [X] T002 [US2] Remove the variable from `.github/workflows/promote-docs.yml` without changing eligibility, revision verification, or branch checks; update `docs/monorepo-migration.md` and run `scripts/docs-publication.test.mjs` to verify that promotion still creates the website patch changeset. Direct docs edits without a changeset remain outside this scope.
 
 ## Cross-Cutting Verification
 
