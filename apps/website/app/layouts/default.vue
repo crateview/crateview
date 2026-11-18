@@ -103,38 +103,43 @@ onBeforeUnmount(() => window.removeEventListener('keydown', shortcut))
               :to="localePath(docPath(stableDocVersion, 'installation'))"
               class="text-muted hover:text-highlighted"
               >{{ t('getStarted') }}</NuxtLink
-            ><a
+            >
+            <a
               href="https://github.com/crateview/crateview/tree/main/docs"
               target="_blank"
               rel="noopener noreferrer"
               class="text-muted hover:text-highlighted"
               >{{ t('websiteSource') }}</a
-            ><NuxtLink v-if="docsLink" :to="docsLink" class="text-muted hover:text-highlighted">{{
+            >
+            <NuxtLink v-if="docsLink" :to="docsLink" class="text-muted hover:text-highlighted">{{
               t('docs')
-            }}</NuxtLink
-            ><a
+            }}</NuxtLink>
+            <a
               href="https://buymeacoffee.com/tobiaswaelde"
               target="_blank"
               rel="noopener noreferrer"
               class="text-muted hover:text-highlighted"
               >{{ t('support') }}</a
-            ><a
+            >
+            <a
               v-if="safeUrl(config.brandRepositoryUrl)"
               :href="safeUrl(config.brandRepositoryUrl)"
               target="_blank"
               rel="noopener noreferrer"
               class="text-muted hover:text-highlighted"
               >{{ t('sourceCode') }}</a
-            ><a
+            >
+            <a
               href="https://github.com/crateview/crateview/security/policy"
               target="_blank"
               rel="noopener noreferrer"
               class="text-muted hover:text-highlighted"
               >{{ t('security') }}</a
-            ><NuxtLink :to="localePath('/imprint')" class="text-muted hover:text-highlighted">{{
+            >
+            <NuxtLink :to="localePath('/imprint')" class="text-muted hover:text-highlighted">{{
               t('imprint')
-            }}</NuxtLink
-            ><NuxtLink
+            }}</NuxtLink>
+            <NuxtLink
               :to="localePath('/privacy-policy')"
               class="text-muted hover:text-highlighted"
               >{{ t('privacyPolicy') }}</NuxtLink
