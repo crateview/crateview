@@ -38,6 +38,9 @@ jobs:
         working-directory: .
       - name: Check picomatch hardening
         run: node --test --test-name-pattern=registry-ui ../../scripts/checks/picomatch-hardening.test.mjs
+      - name: Verify hardened package provenance
+        run: node scripts/build-hardened-picomatch.mjs --check
+        working-directory: .
       - name: Install account service dependencies
         run: npm ci --prefix auth
       - name: Check types

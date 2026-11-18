@@ -13,7 +13,7 @@
     "dev": "nuxt dev --host 127.0.0.1 --port 3002",
     "build": "nuxt build",
     "start": "node .output/server/index.mjs",
-    "postinstall": "node scripts/patch-picomatch.mjs && node scripts/patch-import-x.mjs && nuxt prepare",
+    "postinstall": "node scripts/patch-import-x.mjs && nuxt prepare",
     "typecheck": "nuxt typecheck",
     "lint": "eslint .",
     "test": "vitest run",
@@ -50,6 +50,8 @@
     "node": ">=26.13.0 <27"
   },
   "overrides": {
+    "picomatch@2": "file:vendor/crateview-picomatch-hardened-2.3.2.tgz",
+    "picomatch@4": "file:vendor/crateview-picomatch-hardened-4.0.7.tgz",
     "minimatch": "^11.0.3",
     "glob": "^14.0.3",
     "esbuild": "^0.28.2",

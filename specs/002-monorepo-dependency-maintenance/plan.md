@@ -14,6 +14,6 @@ Land supported dependency updates via their existing PRs where possible. Require
 
 Confirm the resolved versions and open alerts on `main` after merging. Do not use a downgrade or suppress a finding to clear an audit report. No storage or API contracts change.
 
-If a supported picomatch release is still unavailable, patch each npm-installed copy before Nuxt preparation and production builds, including Docker builds. Reject repeated extglobs at compilation instead of generating the associated unbounded regular expressions. Preserve other glob syntax and standard upstream package resolution. Remove the patch when upgrading to a supported upstream fix.
+If a supported picomatch release is still unavailable, install first-party hardened copies built from verified upstream tarballs. Disable repeated extglobs at compilation without changing other glob syntax. Keep original major-version compatibility, record the fork's distinct package identity, and use local tarballs so installs are hardened even with lifecycle scripts disabled. Remove the temporary fork once a compatible upstream release is available.
 
 See [research.md](research.md), [quickstart.md](quickstart.md), and [tasks.md](tasks.md).
