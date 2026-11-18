@@ -1,5 +1,17 @@
 # @crateview/registry-ui
 
+## 0.9.0
+
+### Minor Changes
+
+- df199bb: Add an opt-in Settings action for authorized operators to start and monitor an existing registry garbage collection job.
+
+### Patch Changes
+
+- a54c87d: Build Registry UI from the Crateview monorepo. The published image name, runtime configuration, account service, and data paths are unchanged.
+- 0b3e135: Harden installed glob matchers by disabling repeated extglobs until an upstream fix is available.
+- 581a20e: Install the hardened glob matcher directly, including when lifecycle scripts are disabled.
+
 ## 0.8.2
 
 ### Patch Changes
