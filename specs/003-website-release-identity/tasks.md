@@ -16,7 +16,7 @@ No shared infrastructure changes. Verify the feature pointer and issue checklist
 
 ## Phase 3: User Story 1 - Identify the Running Website Version (P1, MVP)
 
-- [ ] T001 [P] [US1] Add a focused failing SSR/browser regression in `apps/website/tests/e2e/website.spec.ts`, then expose the exact `apps/website/package.json` version at build time in `apps/website/nuxt.config.ts` and render it once with a single `v` prefix and isolated text direction in `apps/website/app/layouts/default.vue`.
+- [X] T001 [P] [US1] Add a focused failing SSR/browser regression in `apps/website/tests/e2e/website.spec.ts`, then expose the exact `apps/website/package.json` version at build time in `apps/website/nuxt.config.ts` and render it once with a single `v` prefix and isolated text direction in `apps/website/app/layouts/default.vue`.
 
 **Independent acceptance (FR-001, FR-002, SC-001)**: The production homepage and localized documentation footer, including a narrow RTL page, show the correct website version; existing footer links remain usable. Run focused Playwright, lint, format, typecheck and website build before the T001 commit.
 
