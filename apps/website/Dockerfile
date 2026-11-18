@@ -1,4 +1,4 @@
-FROM node:26.13.0-alpine AS build
+FROM node:26.13.1-alpine AS build
 WORKDIR /repo/apps/website
 COPY apps/website/package.json apps/website/package-lock.json ./
 COPY apps/website/vendor ./vendor
@@ -7,7 +7,7 @@ COPY apps/website/ ./
 COPY docs/ /repo/docs/
 RUN node scripts/patch-import-x.mjs && npx nuxt prepare && npm run build
 
-FROM node:26.13.0-alpine
+FROM node:26.13.1-alpine
 RUN apk add --no-cache "zlib>=1.4-r0" \
   && rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx
 WORKDIR /app
