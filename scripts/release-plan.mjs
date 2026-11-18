@@ -36,7 +36,6 @@ export function releasePlan(app, version, tags, published, pending, { branch }) 
     image: `ghcr.io/crateview/${app}`,
     imageTag: `v${version}`,
     tag,
-    versionPr: active && pending,
     build: active && eligible && !pending && !tags.includes(tag),
     release: active && eligible && !pending && !published.includes(tag),
   };

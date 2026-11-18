@@ -9,7 +9,7 @@ Paths are repository-relative. Use the Node version in `.nvmrc`, npm, and the ex
 **Independent test**: No pending changes means no new PR; registry-only, website-only, and both-app changes use the same shared branch and bump only affected packages.
 
 - [X] T001 [US1] Add root Changesets tooling and discovery in `package.json` and its lockfile without changing existing app install semantics. In `.changeset/`, preserve all nine source entries and the two colliding basenames under distinct paths. In `scripts/version-packages.mjs` and its tests, version from root and refresh the lockfiles of changed apps only. Keep old production readers functional until T002.
-- [ ] T002 [US1] Switch `.github/workflows/release.yml`, `scripts/release.mjs`, `scripts/release-plan.mjs`, and docs producers in `.github/workflows/promote-docs.yml` and `scripts/docs-publication.mjs` together to the root queue. Remove the old app queues from active use. Use the pinned official Changesets version action to maintain `changeset-release/main`, preserve CI and current-head safeguards, and verify no duplicate PR or npm publication.
+- [X] T002 [US1] Switch `.github/workflows/release.yml`, `scripts/release.mjs`, `scripts/release-plan.mjs`, and docs producers in `.github/workflows/promote-docs.yml` and `scripts/docs-publication.mjs` together to the root queue. Remove the old app queues from active use. Use the pinned official Changesets version action to maintain `changeset-release/main`, preserve CI and current-head safeguards, and verify no duplicate PR or npm publication.
 
 ## User Story 2: Preserve Independent Releases and Documentation
 

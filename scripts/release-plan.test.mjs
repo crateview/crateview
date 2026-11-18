@@ -23,13 +23,13 @@ test('baseline and stale versions do not publish; a tag without a release is rec
   throws(() => releasePlan('website', '0.4.11-beta.1', [], [], false, main));
 });
 
-test('pending changes create a version PR on main but never publish that app in the same run', () => {
+test('the container publisher skips pending apps and off-branch runs', () => {
   for (const app of ['registry-ui', 'website']) {
     for (const pending of [true, false]) {
       const plan = releasePlan(app, '1.0.0', [], [], pending, { branch: 'refs/heads/demo' });
-      deepEqual([plan.versionPr, plan.build, plan.release], [false, false, false]);
+      deepEqual([plan.build, plan.release], [false, false]);
     }
     const plan = releasePlan(app, '1.0.0', [], [], true, main);
-    deepEqual([plan.versionPr, plan.build, plan.release], [true, false, false]);
+    deepEqual([plan.build, plan.release], [false, false]);
   }
 });

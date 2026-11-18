@@ -13,7 +13,7 @@ function releaseFixture(t, websiteVersion = '0.4.10') {
     ['registry-ui', '0.8.2'],
     ['website', websiteVersion],
   ]) {
-    mkdirSync(join(dir, 'apps', app, '.changeset'), { recursive: true });
+    mkdirSync(join(dir, 'apps', app), { recursive: true });
     writeFileSync(join(dir, 'apps', app, 'package.json'), JSON.stringify({ version }));
   }
   const fixtures = `
@@ -40,7 +40,7 @@ if (tool === 'git') {
 } else if (cmd === 'image' && sub === 'inspect') console.log(process.env.WRONG_IMAGE ? 'wrong-source' : revision);
 else if (cmd === 'run') console.log('fixture-container');
 `;
-  for (const tool of ['git', 'gh', 'docker', 'npm'])
+  for (const tool of ['git', 'gh', 'docker'])
     writeFileSync(join(dir, tool), `#!${process.execPath}\n${fixtures}`, { mode: 0o700 });
 
   const env = {
@@ -48,6 +48,7 @@ else if (cmd === 'run') console.log('fixture-container');
     PATH: `${dir}:${process.env.PATH}`,
     GITHUB_REF: 'refs/heads/main',
     GITHUB_REPOSITORY: 'crateview/crateview',
+    PENDING_RELEASE_PACKAGES: '[]',
   };
   delete env.CRATEVIEW_MONOREPO_PUBLISH;
   const run = (overrides = {}) =>
@@ -79,24 +80,12 @@ test('off-branch and stale runs do not write release state', (t) => {
   ]);
 });
 
-for (const pending of [['registry-ui'], ['website'], ['registry-ui', 'website']]) {
-  test(`creates version PRs without a publishing switch: ${pending.join(', ')}`, (t) => {
-    const { dir, run, commands } = releaseFixture(t);
-    for (const app of pending) writeFileSync(join(dir, 'apps', app, '.changeset', 'pending.md'), 'Pending change');
-
-    const result = run();
-    equal(result.status, 0, result.stderr);
-    const calls = commands();
-    const branches = calls
-      .filter(([tool, cmd, sub]) => tool === 'gh' && cmd === 'pr' && sub === 'create')
-      .map((args) => args[args.indexOf('--head') + 1]);
-    deepEqual(
-      branches,
-      pending.map((app) => `changeset-release/${app}`),
-    );
-    ok(!calls.some(([tool, cmd]) => tool === 'docker' || (tool === 'gh' && cmd === 'release')));
-  });
-}
+test('pending website changes prevent publication and the container script never creates a PR', (t) => {
+  const { run, commands } = releaseFixture(t, '0.4.11');
+  const result = run({ PENDING_RELEASE_PACKAGES: '["@crateview/website"]' });
+  equal(result.status, 0, result.stderr);
+  ok(!commands().some(([tool, cmd]) => tool === 'docker' || (tool === 'gh' && ['release', 'pr'].includes(cmd))));
+});
 
 test('website publication verifies the digest and keeps the registry release stream untouched', (t) => {
   const { run, commands } = releaseFixture(t, '0.4.11');

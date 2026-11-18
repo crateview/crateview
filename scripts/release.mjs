@@ -1,10 +1,9 @@
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { requestPromotion } from '../apps/registry-ui/scripts/request-docs-promotion.mjs';
-import { assignWebsiteVersion } from './docs-publication.mjs';
 import { apps, releasePlan } from './release-plan.mjs';
 
 const config = { branch: process.env.GITHUB_REF };
@@ -16,53 +15,6 @@ const committed = git('rev-parse', 'HEAD');
 
 function currentMain() {
   return git('ls-remote', 'origin', 'refs/heads/main').split(/\s/)[0] === committed;
-}
-
-function versionPr(app, directory) {
-  const branch = `changeset-release/${app}`;
-  const title = `chore: release ${app}`;
-  const existing = gh('pr', 'list', '--head', branch, '--base', 'main', '--json', 'number', '--jq', '.[0].number');
-  const previous = git('ls-remote', 'origin', `refs/heads/${branch}`).split(/\s/)[0];
-  if (previous) {
-    run('git', ['fetch', 'origin', branch]);
-    if (existing && git('rev-parse', `${previous}^`) === committed) return;
-  }
-  run('git', ['switch', '-C', branch, committed]);
-  try {
-    const promotedTags =
-      app === 'website'
-        ? readdirSync(`${directory}/.changeset`)
-            .filter((name) => /^docs-v\d+\.\d+\.\d+\.md$/.test(name))
-            .map((name) => name.slice(5, -3))
-        : [];
-    run('npm', ['ci', '--prefix', directory]);
-    run('npm', ['--prefix', directory, 'run', 'version']);
-    run('git', ['add', '--', directory]);
-    const { version } = JSON.parse(readFileSync(`${directory}/package.json`, 'utf8'));
-    if (assignWebsiteVersion(process.cwd(), version, promotedTags)) run('git', ['add', '--', 'docs/publications.json']);
-    run('git', ['commit', '-m', `chore: version ${app}`]);
-    if (!currentMain()) throw new Error('Main advanced; recompute release plan on the new head');
-    run('git', ['push', `--force-with-lease=refs/heads/${branch}:${previous}`, 'origin', branch]);
-    const number =
-      existing ||
-      gh(
-        'pr',
-        'create',
-        '--head',
-        branch,
-        '--base',
-        'main',
-        '--title',
-        title,
-        '--body',
-        `Version ${app} with Changesets.`,
-      );
-    // GITHUB_TOKEN pushes are not a reliable way to trigger PR checks.
-    run('gh', ['workflow', 'run', 'ci.yml', '--ref', branch]);
-    console.log(`Version PR for ${app}: ${number}`);
-  } finally {
-    run('git', ['switch', '--detach', committed]);
-  }
 }
 
 function imageRevision(image) {
@@ -169,6 +121,11 @@ async function publish(app, plan) {
 }
 
 if (config.branch === 'refs/heads/main' && currentMain()) {
+  const pendingPackages = JSON.parse(process.env.PENDING_RELEASE_PACKAGES);
+  const knownPackages = Object.keys(apps).map((app) => `@crateview/${app}`);
+  if (!Array.isArray(pendingPackages) || pendingPackages.some((name) => !knownPackages.includes(name))) {
+    throw new Error('Invalid pending release package list');
+  }
   const tags = git('tag', '--list').split('\n');
   const releases = JSON.parse(
     gh('api', '--paginate', '--slurp', `repos/${process.env.GITHUB_REPOSITORY}/releases?per_page=100`),
@@ -179,10 +136,9 @@ if (config.branch === 'refs/heads/main' && currentMain()) {
   for (const app of Object.keys(apps)) {
     const directory = `apps/${app}`;
     const { version } = JSON.parse(readFileSync(`${directory}/package.json`, 'utf8'));
-    const pending = readdirSync(`${directory}/.changeset`).some((name) => name !== 'README.md' && name.endsWith('.md'));
+    const pending = pendingPackages.includes(`@crateview/${app}`);
     const plan = releasePlan(app, version, tags, releases, pending, config);
-    if (plan.versionPr) versionPr(app, directory);
-    else if (plan.build || plan.release) await publish(app, plan);
+    if (plan.build || plan.release) await publish(app, plan);
   }
   const registry = apps['registry-ui'];
   for (const tag of git('tag', '--list', 'v*').split('\n')) {
