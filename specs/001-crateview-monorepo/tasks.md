@@ -6,7 +6,7 @@
 
 ## Phase 1: Setup
 
-- [ ] T001 Record current local CI checks, canonical source revisions and gitlink, release baselines, docs route inventory, and rollback prerequisites in `docs/monorepo-migration.md`; keep actual private operations data in the restricted operator record. Verify the website gitlink against the intended published docs baseline.
+- [X] T001 Record current local CI checks, canonical source revisions and gitlink, release baselines, docs route inventory, and rollback prerequisites in `docs/monorepo-migration.md`; keep actual private operations data in the restricted operator record. Verify the website gitlink against the intended published docs baseline.
 
 ## Phase 2: Foundational
 
