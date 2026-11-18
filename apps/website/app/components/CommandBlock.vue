@@ -21,8 +21,8 @@ onBeforeUnmount(() => clearTimeout(timer))
 <template>
   <div class="overflow-hidden rounded-xl border border-default bg-muted/50">
     <div class="flex items-center justify-between border-b border-default px-4 py-2.5">
-      <span class="text-xs text-muted">{{ label || t('terminal') }}</span
-      ><UButton
+      <span class="text-xs text-muted">{{ label || t('terminal') }}</span>
+      <UButton
         :icon="copied ? 'i-lucide-check' : 'i-lucide-copy'"
         :aria-label="t(copied ? 'copied' : 'copy')"
         color="neutral"

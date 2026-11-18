@@ -91,7 +91,8 @@ useSeoMeta({
             size="xl"
             class="px-6"
             >{{ t('getStarted') }}</UButton
-          ><UButton
+          >
+          <UButton
             v-if="safeUrl(config.brandRepositoryUrl)"
             :to="safeUrl(config.brandRepositoryUrl)"
             target="_blank"
