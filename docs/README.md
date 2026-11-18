@@ -2,10 +2,9 @@
 
 Public documentation sources for [Crateview](https://crateview.de).
 
-- Stable: [English](https://crateview.de/docs/v0.5/overview), [Deutsch](https://crateview.de/de/docs/v0.5/overview).
-- Archived minors: `v0.1` (0.1.2), `v0.2` (0.2.1), `v0.3` (0.3.0), `v0.4` (0.4.0).
-- Internal unreleased source: `next`; exact source revisions and page lists live in `versions.json`.
-- All six versions support English, German, Simplified Chinese, Hindi, Spanish, Arabic, French, Bengali, Brazilian Portuguese, Indonesian, Urdu, Russian and Japanese.
+- Stable: [English](https://crateview.de/docs/overview), [Deutsch](https://crateview.de/de/docs/overview).
+- See [versions.json](versions.json) for the current stable series, archives and internal unreleased `next` source.
+- The guides support English, German, Simplified Chinese, Hindi, Spanish, Arabic, French, Bengali, Brazilian Portuguese, Indonesian, Urdu, Russian and Japanese.
 
 ## Editing
 
@@ -19,8 +18,8 @@ Internal links use `/docs/<version>/<slug>` in English and
 `/<locale>/docs/<version>/<slug>` otherwise; retain `zh-CN` and `pt-BR` case.
 Screenshots use `https://crateview.de/images/docs/<version>/<name>-light.webp`.
 They are captured from the matching exact source revision, not borrowed from the
-latest interface. Light and dark captures and provenance live in the website
-repository. New guide slugs must be added to that version's manifest entry and to
+latest interface. Light and dark captures live in `apps/website/public/images/docs/`;
+release provenance lives in [publications.json](publications.json). Add new guide slugs to the version's manifest entry and
 all website locale dictionaries.
 
 ## Compatibility review
@@ -47,17 +46,15 @@ version/locale combination, localized links, source revisions and image referenc
 
 ## Publishing
 
-The private website includes this repository as its `content/` Git submodule.
-For manual corrections, commit and push reviewed docs, then update the website's
-pinned submodule commit, matching versioned captures and changeset. The website
-release publishes that exact revision. Routine registry releases use automatic
-promotion below. Old unversioned URLs redirect temporarily to the selected stable version.
+The website builds from this root `docs/` directory without a submodule.
+For manual corrections, review the docs, matching captures if needed and a website
+Changeset in the same PR. Routine registry releases use the promotion workflow
+below. Old unversioned URLs redirect temporarily to the selected stable version.
 Internal next pages are not published; on-site search stays
 inside the selected released version and language.
 
-This repository contains documentation only. Website source, builds and container
-image remain private. Registry UI source is public at
-[crateview/registry-ui](https://github.com/crateview/registry-ui).
+Both app sources and the docs are in the public monorepo. The production website
+image remains private.
 
 ## Automatic release promotion
 
@@ -65,8 +62,8 @@ image remain private. Registry UI source is public at
 current before publishing a registry UI release. The website returns 404 for next
 routes and excludes next from its content index and published screenshot assets.
 
-The registry UI release workflow pins this repository's main commit in its
-`docs-promotion.json` release asset. The website promotes that immutable snapshot
+The registry UI release workflow pins the tagged commit, its `docs/` directory,
+and the verified registry image digest in its `docs-promotion.json` release asset. The website promotes that immutable snapshot
 to `v<major>.<minor>`; patches update the existing minor. Older minor archives are
 retained. Changes committed after the request was created belong to a future
 release, even when a promotion is retried.
@@ -81,7 +78,7 @@ revision, and the exact local preview image reference are converted structurally
 
 Each manifest entry declares `captures` capabilities (`overviewRoute`, `monitoring`,
 `accounts`, `userActions`). Keep next capabilities aligned with the upcoming UI.
-The website takes fresh screenshots from the released registry source revision;
+The promotion workflow takes fresh screenshots from the digest-pinned registry image;
 existing next captures are not relabeled as release captures. Failed validation
-or screenshots stop publication. Website automation setup and recovery are
-documented in the website repository. Production server deployment remains manual.
+or screenshots stop publication. See the [migration runbook](monorepo-migration.md)
+for production gates, rollback and image retention.

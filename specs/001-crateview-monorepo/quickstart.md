@@ -41,6 +41,8 @@ Install Playwright Chromium for each app's resolved version first and run the we
 
 In an isolated checkout, use release/promotion fixture tests targeted by `npm run test`. Cover registry-only, website-only, both apps at the same numeric version, and a docs-only promotion. Simulate the same promotion twice and a failure before website deployment. Compare the ledger and archived content against the [model](data-model.md); require one resulting promotion, unchanged unrelated archives, and a stable live version that does not move on failure.
 
-Using a staging runner and read-only checks where possible, verify the old tagged images by digest, repository redirects, required checks, and GHCR workflow repository access. Confirm an anonymous registry image pull succeeds, while the website image requires authorized credentials. Exercise rollback by pinning the recorded website digest in staging with auto-updates disabled and verify its docs routes. Do not publish to production tags, rename the repository, or deploy to production as part of this guide.
+For a credential-free local rollback rehearsal, build the approved legacy website tree with its pinned docs and the new monorepo image. Run the new image and then the legacy image by immutable local image ID, without auto-updates. Verify stable, localized archive and `next` routes on each.
+
+At the separately approved hosted cutover, verify recorded GHCR digests, repository redirects, required checks, and Actions package access. Confirm an anonymous registry image pull succeeds and a website pull requires credentials. Do not publish to production tags, rename the repository, or deploy to production as part of the local guide.
 
 Dry-run legacy cleanup against the inventory. Ensure tags and digests still deployed, documented, supported or retained for rollback (including shared manifests) are excluded. Actual deletion requires an approved artifact list and an expired rollback window.

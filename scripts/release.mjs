@@ -65,15 +65,19 @@ function versionPr(app, directory) {
   }
 }
 
-async function smoke(app, image, revision) {
+function imageRevision(image) {
   run('docker', ['pull', image]);
-  const actual = get('docker', [
+  return get('docker', [
     'image',
     'inspect',
     '--format',
     '{{index .Config.Labels "org.opencontainers.image.revision"}}',
     image,
   ]);
+}
+
+async function smoke(app, image, revision) {
+  const actual = imageRevision(image);
   if (actual !== revision) throw new Error('Release image source revision mismatch');
   const id = get('docker', ['run', '-d', '--network', 'none', image]);
   try {
@@ -145,10 +149,17 @@ async function publish(app, plan) {
   const digest = imageDigest(imageRef);
   if (!/^sha256:[a-f0-9]{64}$/.test(digest)) throw new Error(`Invalid release image digest for ${imageRef}`);
   const digestRef = `${plan.image}@${digest}`;
-  await smoke(app, digestRef, plan.build ? committed : git('rev-parse', `${plan.tag}^{commit}`));
+  const revision = plan.build ? imageRevision(digestRef) : git('rev-parse', `${plan.tag}^{commit}`);
+  if (plan.build && revision !== committed) {
+    if (!/^[a-f0-9]{40}$/.test(revision)) throw new Error('Existing release image has no source revision');
+    run('git', ['merge-base', '--is-ancestor', revision, committed]);
+    const pkg = JSON.parse(git('show', `${revision}:apps/${app}/package.json`));
+    if (`v${pkg.version}` !== plan.imageTag) throw new Error('Existing release image version mismatch');
+  }
+  await smoke(app, digestRef, revision);
   if (!currentMain()) throw new Error('Main advanced; retry publication on the new head');
   if (plan.build) {
-    run('git', ['tag', plan.tag, committed]);
+    run('git', ['tag', plan.tag, revision]);
     run('git', ['push', 'origin', `refs/tags/${plan.tag}`]);
   }
   // Update the watched alias only after the candidate image and its version tag exist.

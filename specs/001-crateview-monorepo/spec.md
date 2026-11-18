@@ -38,7 +38,7 @@ A website reader can reach existing localized and versioned docs, and maintainer
 **Independent Test**: Verify the existing URL inventory using a built site, then dry-run a new registry-ui release against a disposable checkout.
 
 1. **Given** an existing stable or version-specific URL, **When** a reader opens it after cutover, **Then** it resolves to the same published content or preexisting fallback.
-2. **Given** a verified registry-ui release, **When** promotion runs or retries, **Then** it promotes that release's pinned snapshot once and leaves earlier snapshots unchanged.
+2. **Given** a verified registry-ui release, **When** promotion runs or retries, **Then** it promotes that release's pinned snapshot once, preserving historical publication records and unrelated archive content. A patch may advance the public content of its own version series.
 
 ### Edge Cases
 
