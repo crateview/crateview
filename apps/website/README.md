@@ -10,4 +10,4 @@ From the repository root, build the local website image with:
 docker compose -f apps/website/compose.yaml -f apps/website/compose.build.yaml build
 ```
 
-The build uses the repository-root context for the approved website and docs sources. For image-based deploys, keep using `ghcr.io/crateview/website` with the existing runtime environment variables and container port `3000`. The repository's local Compose example binds port `3002` on loopback. The production reverse proxy and credentials are managed separately; do not copy that configuration into the public repo.
+The build uses the repository-root context for the website and docs sources. The local Compose example binds port `3002` on loopback. The private website image is published to `ghcr.io/crateview/website`.
