@@ -1,5 +1,10 @@
+import { version } from './package.json'
 import { supportedLocales } from './shared/locales'
+
 export default defineNuxtConfig({
+  appConfig: {
+    websiteVersion: version,
+  },
   hooks: {
     'nitro:build:public-assets': async (nitro) => {
       const { rm } = await import('node:fs/promises')

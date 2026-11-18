@@ -3,6 +3,7 @@ import { docPath, stableDocVersion } from '#shared/docs'
 const { t } = useI18n()
 const localePath = useLocalePath()
 const config = useRuntimeConfig().public
+const { websiteVersion } = useAppConfig()
 const searchOpen = ref(false)
 const menuOpen = ref(false)
 const route = useRoute()
@@ -157,6 +158,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', shortcut))
             class="ms-3 text-muted hover:text-highlighted"
             >{{ config.brandName }}</a
           >
+          <bdi dir="ltr" class="ms-3 inline-block">v{{ websiteVersion }}</bdi>
         </div>
       </div>
     </footer>
