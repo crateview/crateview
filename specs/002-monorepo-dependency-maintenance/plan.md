@@ -14,4 +14,6 @@ Land supported dependency updates via their existing PRs where possible. Require
 
 Confirm the resolved versions and open alerts on `main` after merging. Do not use a downgrade or suppress a finding to clear an audit report. No storage or API contracts change.
 
+If a supported picomatch release is still unavailable, temporarily vendor the affected upstream majors under their original package name. Reject repeated extglobs at compilation instead of generating the associated unbounded regular expressions. Preserve other glob syntax, retain upstream licenses, and replace the local copies with supported upstream releases when available.
+
 See [research.md](research.md), [quickstart.md](quickstart.md), and [tasks.md](tasks.md).
