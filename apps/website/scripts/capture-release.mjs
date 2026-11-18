@@ -9,6 +9,9 @@ import { randomUUID } from 'node:crypto'
 import { setTimeout as delay } from 'node:timers/promises'
 
 const source = resolve(process.env.REGISTRY_SOURCE)
+const image = process.env.REGISTRY_RELEASE_IMAGE
+if (image && !/^ghcr\.io\/crateview\/registry-ui@sha256:[a-f0-9]{64}$/.test(image))
+  throw new Error('Expected a digest-pinned registry UI image')
 const version = process.argv[2]
 const root = await mkdtemp(join(tmpdir(), 'crateview-capture-'))
 const name = `crateview-capture-${randomUUID()}`
@@ -22,12 +25,12 @@ const baseURL = `http://127.0.0.1:${port}`
 const children = []
 let auth
 let logs = ''
-const docker = (args, input) =>
+const docker = (args, input, env) =>
   execFileSync('docker', args, {
     input,
     encoding: 'utf8',
     stdio: ['pipe', 'pipe', 'pipe'],
-    env: { ...process.env, DOCKER_CONFIG: join(root, 'docker') },
+    env: { ...process.env, ...env, DOCKER_CONFIG: join(root, 'docker') },
   }).trim()
 async function ready(url) {
   for (let i = 0; i < 120; i++) {
@@ -115,31 +118,62 @@ notifications:
   const published = (containerPort) => docker(['port', name, containerPort]).split(':').at(-1)
   const registry = `127.0.0.1:${published('5000/tcp')}`
   await ready(`http://${registry}/v2/`)
-  const app = spawn(process.execPath, ['.output/server/index.mjs'], {
-    cwd: source,
-    stdio: ['ignore', 'pipe', 'pipe'],
-    env: {
-      ...process.env,
-      HOST: '0.0.0.0',
-      PORT: String(port),
-      NUXT_REGISTRY_UPSTREAM: `http://${registry}`,
-      NUXT_REGISTRY_DELETE_ENABLED: 'true',
-      NUXT_AUTH_MODE: 'htpasswd',
-      NUXT_AUTH_SERVICE_URL: `http://127.0.0.1:${auth.address().port}`,
-      NUXT_AUTH_SERVICE_SECRET: secret,
-      NUXT_USER_CREATION_ALLOWED_USERS: 'admin',
-      NUXT_SESSION_PASSWORD: randomUUID(),
-      NUXT_MONITORING_ENABLED: 'true',
-      NUXT_MONITORING_METRICS_URL: `http://127.0.0.1:${published('5001/tcp')}/metrics`,
-      NUXT_MONITORING_WEBHOOK_SECRET: secret,
-      NUXT_MONITORING_DATABASE_PATH: join(root, 'monitoring.sqlite'),
-    },
-  })
-  children.push(app)
-  for (const stream of [app.stdout, app.stderr])
-    stream.on('data', (chunk) => {
-      logs = (logs + chunk).slice(-12000)
+  const env = {
+    HOST: '0.0.0.0',
+    PORT: String(port),
+    NUXT_REGISTRY_UPSTREAM: `http://${registry}`,
+    NUXT_REGISTRY_DELETE_ENABLED: 'true',
+    NUXT_AUTH_MODE: 'htpasswd',
+    NUXT_AUTH_SERVICE_URL: `http://127.0.0.1:${auth.address().port}`,
+    NUXT_AUTH_SERVICE_SECRET: secret,
+    NUXT_USER_CREATION_ALLOWED_USERS: 'admin',
+    NUXT_SESSION_PASSWORD: randomUUID(),
+    NUXT_MONITORING_ENABLED: 'true',
+    NUXT_MONITORING_METRICS_URL: `http://127.0.0.1:${published('5001/tcp')}/metrics`,
+    NUXT_MONITORING_WEBHOOK_SECRET: secret,
+    NUXT_MONITORING_DATABASE_PATH: image
+      ? '/app/data/monitoring.sqlite'
+      : join(root, 'monitoring.sqlite'),
+  }
+  if (image) {
+    docker(['pull', image])
+    const expected = execFileSync('git', ['-C', source, 'rev-parse', 'HEAD'], {
+      encoding: 'utf8',
+    }).trim()
+    const revision = docker([
+      'image',
+      'inspect',
+      '--format',
+      '{{index .Config.Labels "org.opencontainers.image.revision"}}',
+      image,
+    ])
+    if (revision !== expected) throw new Error('Capture image does not match the pinned release')
+    docker(
+      [
+        'run',
+        '-d',
+        '--name',
+        name + '-ui',
+        '--network',
+        'host',
+        ...Object.keys(env).flatMap((key) => ['-e', key]),
+        image,
+      ],
+      undefined,
+      env,
+    )
+  } else {
+    const app = spawn(process.execPath, ['.output/server/index.mjs'], {
+      cwd: source,
+      stdio: ['ignore', 'pipe', 'pipe'],
+      env: { ...process.env, ...env },
     })
+    children.push(app)
+    for (const stream of [app.stdout, app.stderr])
+      stream.on('data', (chunk) => {
+        logs = (logs + chunk).slice(-12000)
+      })
+  }
   await ready(baseURL + '/login')
   await seedCaptureRegistry(`http://${registry}`, password)
   await run(
@@ -158,6 +192,13 @@ notifications:
 } finally {
   for (const child of children) if (child.exitCode === null) child.kill('SIGTERM')
   if (auth) await new Promise((resolve) => auth.close(resolve))
+  if (image) {
+    try {
+      docker(['rm', '-f', name + '-ui'])
+    } catch {
+      /* UI may not have started. */
+    }
+  }
   try {
     docker(['rm', '-f', name])
   } catch {

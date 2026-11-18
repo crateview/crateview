@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { apps, releasePlan } from './release-plan.mjs';
 import { requestPromotion } from '../apps/registry-ui/scripts/request-docs-promotion.mjs';
+import { assignWebsiteVersion } from './docs-publication.mjs';
 
 const config = { branch: process.env.GITHUB_REF, enabled: process.env.CRATEVIEW_MONOREPO_PUBLISH };
 const get = (program, args) => execFileSync(program, args, { encoding: 'utf8' }).trim();
@@ -28,9 +29,17 @@ function versionPr(app, directory) {
   }
   run('git', ['switch', '-C', branch, committed]);
   try {
+    const promotedTags =
+      app === 'website'
+        ? readdirSync(`${directory}/.changeset`)
+            .filter((name) => /^docs-v\d+\.\d+\.\d+\.md$/.test(name))
+            .map((name) => name.slice(5, -3))
+        : [];
     run('npm', ['ci', '--prefix', directory]);
     run('npm', ['--prefix', directory, 'run', 'version']);
     run('git', ['add', '--', directory]);
+    const { version } = JSON.parse(readFileSync(`${directory}/package.json`, 'utf8'));
+    if (assignWebsiteVersion(process.cwd(), version, promotedTags)) run('git', ['add', '--', 'docs/publications.json']);
     run('git', ['commit', '-m', `chore: version ${app}`]);
     if (!currentMain()) throw new Error('Main advanced; recompute release plan on the new head');
     run('git', ['push', `--force-with-lease=refs/heads/${branch}:${previous}`, 'origin', branch]);
@@ -90,9 +99,18 @@ async function smoke(app, image, revision) {
   }
 }
 
+function imageDigest(ref) {
+  try {
+    return JSON.parse(get('docker', ['buildx', 'imagetools', 'inspect', '--format', '{{json .Manifest}}', ref])).digest;
+  } catch (error) {
+    if (/manifest unknown|not found/i.test(String(error.stderr))) return undefined;
+    throw error;
+  }
+}
+
 async function publish(app, plan) {
   const imageRef = `${plan.image}:${plan.imageTag}`;
-  if (plan.build) {
+  if (plan.build && !imageDigest(imageRef)) {
     if (!currentMain()) throw new Error('Main advanced; recompute release plan on the new head');
     const dir = mkdtempSync(join(tmpdir(), 'crateview-build-'));
     const metadata = join(dir, 'build.json');
@@ -124,15 +142,17 @@ async function publish(app, plan) {
     if (!currentMain()) throw new Error('Main advanced; retry publication on the new head');
     run('docker', ['buildx', 'imagetools', 'create', '--tag', imageRef, digestRef]);
   }
-  run('docker', ['buildx', 'imagetools', 'inspect', imageRef]);
-  if (!plan.build) await smoke(app, imageRef, git('rev-parse', `${plan.tag}^{commit}`));
+  const digest = imageDigest(imageRef);
+  if (!/^sha256:[a-f0-9]{64}$/.test(digest)) throw new Error(`Invalid release image digest for ${imageRef}`);
+  const digestRef = `${plan.image}@${digest}`;
+  await smoke(app, digestRef, plan.build ? committed : git('rev-parse', `${plan.tag}^{commit}`));
   if (!currentMain()) throw new Error('Main advanced; retry publication on the new head');
   if (plan.build) {
     run('git', ['tag', plan.tag, committed]);
     run('git', ['push', 'origin', `refs/tags/${plan.tag}`]);
   }
   // Update the watched alias only after the candidate image and its version tag exist.
-  run('docker', ['buildx', 'imagetools', 'create', '--tag', `${plan.image}:latest`, imageRef]);
+  run('docker', ['buildx', 'imagetools', 'create', '--tag', `${plan.image}:latest`, digestRef]);
   if (plan.release)
     run('gh', ['release', 'create', plan.tag, '--generate-notes', '--verify-tag', `--latest=${app === 'registry-ui'}`]);
 }
@@ -162,9 +182,9 @@ if (config.enabled === 'true' && config.branch === 'refs/heads/main' && currentM
     const release = JSON.parse(gh('api', `repos/${process.env.GITHUB_REPOSITORY}/releases/tags/${tag}`));
     if (release.assets.some((asset) => asset.name === 'docs-promotion.json')) continue;
     const ref = `ghcr.io/crateview/registry-ui:${registry.prefix}${version}`;
-    const digest = JSON.parse(
-      get('docker', ['buildx', 'imagetools', 'inspect', '--format', '{{json .Manifest}}', ref]),
-    ).digest;
+    const digest = imageDigest(ref);
+    if (!/^sha256:[a-f0-9]{64}$/.test(digest)) throw new Error(`Invalid registry image digest for ${tag}`);
+    await smoke('registry-ui', `ghcr.io/crateview/registry-ui@${digest}`, git('rev-parse', `${tag}^{commit}`));
     await requestPromotion(tag, digest);
   }
 }
