@@ -12,7 +12,7 @@ No additional setup or dependencies; reuse the existing workflow and test harnes
 
 **Independent test**: On current `main` without the variable, one pending app produces one version PR, and two pending apps produce two. Off-branch and stale runs create none.
 
-- [ ] T001 [US1] Remove the release gate from `.github/workflows/release.yml`, `scripts/release.mjs`, and `scripts/release-plan.mjs`; update `scripts/release-plan.test.mjs` and extend `scripts/release-dry-run.test.mjs` for independent app PRs, off-branch or stale runs, and preserved image verification. Keep CI and existing publication eligibility.
+- [X] T001 [US1] Remove the release gate from `.github/workflows/release.yml`, `scripts/release.mjs`, and `scripts/release-plan.mjs`; update `scripts/release-plan.test.mjs` and extend `scripts/release-dry-run.test.mjs` for independent app PRs, off-branch or stale runs, and preserved image verification. Keep CI and existing publication eligibility.
 
 ## User Story 2: Use Normal Release Safeguards
 

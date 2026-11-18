@@ -19,7 +19,7 @@ function compare(left, right) {
   return 0;
 }
 
-export function releasePlan(app, version, tags, published, pending, { enabled, branch }) {
+export function releasePlan(app, version, tags, published, pending, { branch }) {
   if (!Object.hasOwn(apps, app)) throw new Error(`Unknown app: ${app}`);
   const { baseline, prefix, context } = apps[app];
   const tag = `${prefix}${version}`;
@@ -29,7 +29,7 @@ export function releasePlan(app, version, tags, published, pending, { enabled, b
       versionPattern.test(entry.slice(prefix.length)) &&
       compare(entry.slice(prefix.length), version) > 0,
   );
-  const active = enabled === 'true' && branch === 'refs/heads/main';
+  const active = branch === 'refs/heads/main';
   const eligible = compare(version, baseline) > 0 && !newer;
   return {
     context,

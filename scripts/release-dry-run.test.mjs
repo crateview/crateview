@@ -6,12 +6,12 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-test('website publication verifies the digest and keeps the registry release stream untouched', (t) => {
+function releaseFixture(t, websiteVersion = '0.4.10') {
   const dir = mkdtempSync(join(tmpdir(), 'crateview-publish-plan-'));
   t.after(() => rmSync(dir, { recursive: true, force: true }));
   for (const [app, version] of [
     ['registry-ui', '0.8.2'],
-    ['website', '0.4.11'],
+    ['website', websiteVersion],
   ]) {
     mkdirSync(join(dir, 'apps', app, '.changeset'), { recursive: true });
     writeFileSync(join(dir, 'apps', app, 'package.json'), JSON.stringify({ version }));
@@ -25,10 +25,12 @@ const revision = 'a'.repeat(40);
 const digest = 'sha256:' + 'b'.repeat(64);
 appendFileSync('commands', JSON.stringify([tool, ...args]) + '\\n');
 if (tool === 'git') {
-  if (cmd === 'rev-parse' || cmd === 'ls-remote') console.log(revision);
+  if (cmd === 'rev-parse') console.log(revision);
+  if (cmd === 'ls-remote' && detail === 'refs/heads/main')
+    console.log(process.env.STALE_HEAD ? 'c'.repeat(40) : revision);
 } else if (tool === 'gh') {
   if (cmd === 'api') console.log('[[]]');
-} else if (cmd === 'buildx' && sub === 'build') {
+} else if (tool === 'docker' && cmd === 'buildx' && sub === 'build') {
   writeFileSync(args[args.indexOf('--metadata-file') + 1], JSON.stringify({ 'containerimage.digest': digest }));
 } else if (cmd === 'buildx' && sub === 'imagetools' && detail === 'inspect') {
   if (!existsSync('version-image')) { console.error('manifest unknown'); process.exit(1); }
@@ -38,7 +40,7 @@ if (tool === 'git') {
 } else if (cmd === 'image' && sub === 'inspect') console.log(process.env.WRONG_IMAGE ? 'wrong-source' : revision);
 else if (cmd === 'run') console.log('fixture-container');
 `;
-  for (const tool of ['git', 'gh', 'docker'])
+  for (const tool of ['git', 'gh', 'docker', 'npm'])
     writeFileSync(join(dir, tool), `#!${process.execPath}\n${fixtures}`, { mode: 0o700 });
 
   const env = {
@@ -47,10 +49,11 @@ else if (cmd === 'run') console.log('fixture-container');
     GITHUB_REF: 'refs/heads/main',
     GITHUB_REPOSITORY: 'crateview/crateview',
   };
-  const run = (enabled, wrongImage = '') =>
+  delete env.CRATEVIEW_MONOREPO_PUBLISH;
+  const run = (overrides = {}) =>
     spawnSync(process.execPath, [fileURLToPath(new URL('./release.mjs', import.meta.url))], {
       cwd: dir,
-      env: { ...env, CRATEVIEW_MONOREPO_PUBLISH: enabled, WRONG_IMAGE: wrongImage },
+      env: { ...env, ...overrides },
       encoding: 'utf8',
     });
   const commands = () =>
@@ -59,18 +62,49 @@ else if (cmd === 'run') console.log('fixture-container');
       .split('\n')
       .map((line) => JSON.parse(line));
 
-  const disabled = run('');
-  equal(disabled.status, 0, disabled.stderr);
+  return { dir, run, commands };
+}
+
+test('off-branch and stale runs do not write release state', (t) => {
+  const { run, commands } = releaseFixture(t);
+  const offBranch = run({ GITHUB_REF: 'refs/heads/demo' });
+  equal(offBranch.status, 0, offBranch.stderr);
   deepEqual(commands(), [['git', 'rev-parse', 'HEAD']]);
 
-  const invalid = run('true', 'true');
+  const stale = run({ STALE_HEAD: 'true' });
+  equal(stale.status, 0, stale.stderr);
+  deepEqual(commands().slice(1), [
+    ['git', 'rev-parse', 'HEAD'],
+    ['git', 'ls-remote', 'origin', 'refs/heads/main'],
+  ]);
+});
+
+for (const pending of [['registry-ui'], ['website'], ['registry-ui', 'website']]) {
+  test(`creates version PRs without a publishing switch: ${pending.join(', ')}`, (t) => {
+    const { dir, run, commands } = releaseFixture(t);
+    for (const app of pending) writeFileSync(join(dir, 'apps', app, '.changeset', 'pending.md'), 'Pending change');
+
+    const result = run();
+    equal(result.status, 0, result.stderr);
+    const calls = commands();
+    const branches = calls
+      .filter(([tool, cmd, sub]) => tool === 'gh' && cmd === 'pr' && sub === 'create')
+      .map((args) => args[args.indexOf('--head') + 1]);
+    deepEqual(branches, pending.map((app) => `changeset-release/${app}`));
+    ok(!calls.some(([tool, cmd]) => tool === 'docker' || (tool === 'gh' && cmd === 'release')));
+  });
+}
+
+test('website publication verifies the digest and keeps the registry release stream untouched', (t) => {
+  const { run, commands } = releaseFixture(t, '0.4.11');
+  const invalid = run({ WRONG_IMAGE: 'true' });
   equal(invalid.status, 1, invalid.stderr);
   match(invalid.stderr, /Release image source revision mismatch/);
   ok(!commands().some((args) => args.includes('ghcr.io/crateview/website:latest')));
   ok(!commands().some(([tool, command]) => tool === 'gh' && command === 'release'));
 
-  const enabled = run('true');
-  equal(enabled.status, 0, enabled.stderr);
+  const published = run();
+  equal(published.status, 0, published.stderr);
   const calls = commands();
   const smoke = calls.findIndex((args) => args[0] === 'docker' && args[1] === 'exec');
   const latest = calls.findIndex((args) => args.includes('ghcr.io/crateview/website:latest'));
