@@ -26,6 +26,12 @@ The pinned `versions.json` defines stable `v0.8` (registry `v0.8.2`), archives `
 
 These are spot checks, not a full route comparison. Run the full [validation guide](../specs/001-crateview-monorepo/quickstart.md) against a staged image.
 
+## Website import approval
+
+The owner approved publishing the 235-file allowlist from the pinned website commit in `apps/website/`, under the repository's MIT license for first-party code. Preserve the bundled third-party notices. Do not import `.github/`, `deploy/`, `.env.example`, `.gitmodules`, the `content` gitlink, `README.md`, or `SECURITY.md` from the website. Approved public-safe replacements may be authored separately.
+
+The exact allowlist is the pinned Git tree's file paths minus those exclusions. A credential-signature scan of the approved blobs found no matches; this is not a substitute for verifying that the import uses exactly that tree and scope.
+
 ## Rollback prerequisites
 
 - Record known-good running digests, effective deployment inputs, and current publication owners in the restricted operator record. Verify staging can pull both retained digests using the expected access.

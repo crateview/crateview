@@ -10,7 +10,7 @@
 
 ## Phase 2: Foundational
 
-- [ ] T002 Gate the import in `docs/monorepo-migration.md`: review and scan the exact website tracked-file allowlist privately, verify licensing, and obtain explicit owner approval before copying website files into the public target checkout. Record only publicly safe evidence and exclusions; stop if the import is not approved.
+- [X] T002 Gate the import in `docs/monorepo-migration.md`: review and scan the exact website tracked-file allowlist privately, verify licensing, and obtain explicit owner approval before copying website files into the public target checkout. Record only publicly safe evidence and exclusions; stop if the import is not approved.
 
 ## Phase 3: US1 — Contribute from one checkout (P1)
 
