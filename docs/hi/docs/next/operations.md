@@ -30,6 +30,8 @@ Distribution `REGISTRY_STORAGE_DELETE_ENABLED=true` भी पढ़ सकत�
 
 ## कचरा संग्रहण और बैकअप
 
+Crateview सर्वर पर `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true` सेट करें। `NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` में कचरा संग्रहण चलाने की अनुमति वाले प्रबंधित उपयोगकर्ताओं के सटीक नाम दें और `NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` तथा `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN` कॉन्फ़िगर करें। अडैप्टर का टोकन ब्राउज़र कॉन्फ़िगरेशन में न रखें।
+
 किसी मेनिफ़ेस्ट को हटाना तत्काल डिस्क पुनर्प्राप्ति का वादा नहीं करता है। कचरा संग्रहण एक अलग रजिस्ट्री प्रशासन कार्य है; Crateview इसे नहीं चलाता है.
 
 स्टोरेज ड्राइवर के लिए उपयुक्त विधि का उपयोग करके अपने रजिस्ट्री स्टोरेज और उसके कॉन्फ़िगरेशन का बैकअप लें। कंटेनर बदलते समय मात्रा रखें। कचरा संग्रहण और समन्वय लिखने के लिए Distribution के निर्देशों का पालन करें:

@@ -30,6 +30,8 @@ Selecione uma ou mais tags na tabela e confirme a exclusão. A prévia atualiza 
 
 ## Coleta de lixo e backups
 
+Defina `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true`, informe em `NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` os nomes exatos dos usuários gerenciados autorizados a executar a coleta de lixo e configure `NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` e `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN` no servidor do Crateview. Não inclua o token do adaptador na configuração do navegador.
+
 A exclusão de um manifesto não promete recuperação imediata do disco. A coleta de lixo é uma tarefa separada de administração de registro; Crateview não o executa.
 
 Faça backup do armazenamento do registro e de sua configuração usando um método apropriado ao driver de armazenamento. Mantenha os volumes ao substituir os recipientes. Siga as instruções da Distribution para coleta de lixo e coordenação de gravação:

@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { appendFileSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -133,12 +133,16 @@ if (config.branch === 'refs/heads/main' && currentMain()) {
     .flat()
     .filter((release) => !release.draft && !release.prerelease)
     .map((release) => release.tag_name);
+  let promoteDocs = false;
   for (const app of Object.keys(apps)) {
     const directory = `apps/${app}`;
     const { version } = JSON.parse(readFileSync(`${directory}/package.json`, 'utf8'));
     const pending = pendingPackages.includes(`@crateview/${app}`);
     const plan = releasePlan(app, version, tags, releases, pending, config);
-    if (plan.build || plan.release) await publish(app, plan);
+    if (plan.build || plan.release) {
+      await publish(app, plan);
+      if (app === 'website') promoteDocs = true;
+    }
   }
   const registry = apps['registry-ui'];
   for (const tag of git('tag', '--list', 'v*').split('\n')) {
@@ -153,5 +157,7 @@ if (config.branch === 'refs/heads/main' && currentMain()) {
     if (!/^sha256:[a-f0-9]{64}$/.test(digest)) throw new Error(`Invalid registry image digest for ${tag}`);
     await smoke('registry-ui', `ghcr.io/crateview/registry-ui@${digest}`, git('rev-parse', `${tag}^{commit}`));
     await requestPromotion(tag, digest);
+    promoteDocs = true;
   }
+  if (promoteDocs && process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, 'promote_docs=true\n');
 }

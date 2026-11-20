@@ -19,8 +19,15 @@ import { recordPublication } from './docs-publication.mjs';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const apps = ['registry-ui', 'website'];
 
-for (const pending of [[], ['registry-ui'], ['website'], apps]) {
-  test(`plans and versions only affected packages: ${pending.join(', ') || 'none'}`, (t) => {
+for (const { pending, docsPatch } of [
+  { pending: [] },
+  { pending: ['registry-ui'] },
+  { pending: ['website'] },
+  { pending: apps },
+  { pending: ['website'], docsPatch: true },
+]) {
+  const scenario = docsPatch ? 'published docs correction' : pending.join(', ') || 'none';
+  test(`plans and versions only affected packages: ${scenario}`, (t) => {
     const dir = mkdtempSync(join(tmpdir(), 'crateview-version-'));
     t.after(() => rmSync(dir, { recursive: true, force: true }));
     for (const directory of ['.changeset', 'docs', 'scripts', ...apps.map((app) => `apps/${app}`)]) {
@@ -51,7 +58,7 @@ for (const pending of [[], ['registry-ui'], ['website'], apps]) {
     }
     const tag = 'v1.2.3';
     const ledger = join(dir, 'docs/publications.json');
-    if (pending.includes('website')) {
+    if (pending.includes('website') && !docsPatch) {
       writeFileSync(ledger, '{}');
       recordPublication(
         dir,
@@ -62,7 +69,7 @@ for (const pending of [[], ['registry-ui'], ['website'], apps]) {
     const run = (command, args) =>
       execFileSync(command, args, {
         cwd: dir,
-        env: { ...process.env, GITHUB_ACTIONS: 'false' },
+        env: { ...process.env, GITHUB_ACTIONS: 'false', PUBLISHED_DOCS_PATCH: String(Boolean(docsPatch)) },
         stdio: 'pipe',
       });
     run('git', ['init', '-b', 'main']);
@@ -78,7 +85,7 @@ for (const pending of [[], ['registry-ui'], ['website'], apps]) {
     ]);
     run('npm', ['run', 'changeset', '--', 'status', '--output', 'plan.json']);
     const plan = JSON.parse(readFileSync(join(dir, 'plan.json'), 'utf8'));
-    deepEqual(plan.releases.map(({ name }) => name).sort(), pending.map((app) => `@crateview/${app}`).sort());
+    deepEqual(plan.releases.map(({ name }) => name).sort(), (docsPatch ? [] : pending).map((app) => `@crateview/${app}`).sort());
     if (pending.length) run(process.execPath, ['scripts/version-packages.mjs']);
     for (const app of apps) {
       const files = ['package.json', 'package-lock.json'].map((file) =>
@@ -92,7 +99,11 @@ for (const pending of [[], ['registry-ui'], ['website'], apps]) {
       equal(files[1].packages[''].version, version);
       equal(existsSync(join(dir, 'apps', app, 'CHANGELOG.md')), pending.includes(app));
     }
-    if (pending.includes('website')) {
+    if (docsPatch) {
+      equal(existsSync(join(dir, '.changeset', 'published-docs.md')), false);
+      equal(existsSync(ledger), false);
+    }
+    if (pending.includes('website') && !docsPatch) {
       equal(JSON.parse(readFileSync(ledger, 'utf8'))[tag].websiteVersion, '1.0.1');
       equal(existsSync(join(dir, '.changeset', `docs-${tag}.md`)), false);
     }

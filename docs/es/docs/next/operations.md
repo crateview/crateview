@@ -30,6 +30,8 @@ Selecciona una o varias etiquetas en la tabla y confirma la eliminación. La vis
 
 ## Recolección de basura y copias de seguridad.
 
+Define `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true`, indica en `NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` los nombres exactos de los usuarios gestionados autorizados a ejecutar la recolección de basura y configura `NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` y `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN` en el servidor de Crateview. No incluyas el token del adaptador en la configuración del navegador.
+
 Eliminar un manifiesto no promete una recuperación inmediata del disco. La recolección de basura es una tarea de administración del registro separada; Crateview no lo ejecuta.
 
 Haga una copia de seguridad del almacenamiento de su registro y su configuración utilizando un método apropiado para el controlador de almacenamiento. Mantenga los volúmenes al reemplazar los contenedores. Siga las instrucciones de Distribution para la recolección de basura y la coordinación de escritura:

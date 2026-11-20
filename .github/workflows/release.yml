@@ -53,6 +53,15 @@ jobs:
           trap 'rm -f "$plan"' EXIT
           npm run changeset -- status --output "$plan"
           pending=$(jq -c '[.releases[].name]' "$plan")
+          if ! jq -e 'index("@crateview/website")' <<< "$pending" > /dev/null; then
+            website=$(jq -er .version apps/website/package.json)
+            version_commit=$(git log -1 --format=%H -S "\"version\": \"$website\"" HEAD -- apps/website/package.json)
+            test -n "$version_commit"
+            if ! git diff --quiet "$version_commit" HEAD -- ':(glob)docs/*/docs/v[0-9]*/**'; then
+              echo "docs_patch=true" >> "$GITHUB_OUTPUT"
+              pending=$(jq -c '. + ["@crateview/website"]' <<< "$pending")
+            fi
+          fi
           echo "current=true" >> "$GITHUB_OUTPUT"
           echo "pending=$pending" >> "$GITHUB_OUTPUT"
           if [ "$pending" = '[]' ]; then
@@ -69,6 +78,8 @@ jobs:
           echo "update=true" >> "$GITHUB_OUTPUT"
       - name: Maintain the Version Packages PR
         if: steps.plan.outputs.update == 'true'
+        env:
+          PUBLISHED_DOCS_PATCH: ${{ steps.plan.outputs.docs_patch }}
         uses: changesets/action/version@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
         with:
           script: npm run version:packages
@@ -100,8 +111,14 @@ jobs:
       - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4
         if: steps.plan.outputs.current == 'true'
       - name: Process independent releases
+        id: publish
         if: steps.plan.outputs.current == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           PENDING_RELEASE_PACKAGES: ${{ steps.plan.outputs.pending }}
         run: node scripts/release.mjs
+      - name: Queue documentation promotion
+        if: steps.publish.outputs.promote_docs == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run promote-docs.yml --ref main

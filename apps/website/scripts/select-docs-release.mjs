@@ -2,8 +2,7 @@ import { execFileSync } from 'node:child_process'
 import { readFile, writeFile } from 'node:fs/promises'
 import { compare, validateRequest, promotionState } from './promote-docs.mjs'
 
-// Requests are durable release assets, not transient dispatch payloads. A scheduled
-// scan recovers dispatch failures and replaced pending Actions concurrency jobs.
+// Durable release receipts let a subsequent push or manual dispatch recover a missed run.
 const gh = (args) => execFileSync('gh', args, { encoding: 'utf8' }).trim()
 const repo = process.env.GITHUB_REPOSITORY || 'crateview/registry-ui'
 const releases = []

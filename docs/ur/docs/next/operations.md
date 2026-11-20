@@ -30,6 +30,8 @@ Distribution `REGISTRY_STORAGE_DELETE_ENABLED=true` بھی پڑھ سکتا ہے�
 
 ## کچرا جمع کرنا اور بیک اپ
 
+Crateview سرور پر `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true` سیٹ کریں، `NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` میں کچرا جمع کرنے کی اجازت رکھنے والے زیرِ انتظام صارفین کے درست نام درج کریں، اور `NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` اور `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN` ترتیب دیں۔ اڈاپٹر کا ٹوکن براؤزر کی ترتیب میں نہ رکھیں۔
+
 مینی فیسٹ کو حذف کرنا فوری طور پر ڈسک کی بحالی کا وعدہ نہیں کرتا ہے۔ کوڑا اٹھانا رجسٹری انتظامیہ کا الگ کام ہے۔ Crateview اسے نہیں چلاتا۔
 
 اپنے رجسٹری سٹوریج اور اس کی کنفیگریشن کو سٹوریج ڈرائیور کے لیے موزوں طریقہ استعمال کرتے ہوئے بیک اپ کریں۔ کنٹینرز کو تبدیل کرتے وقت حجم رکھیں۔ کوڑا اٹھانے کے لیے Distribution کی ہدایات پر عمل کریں اور کوآرڈینیشن لکھیں:

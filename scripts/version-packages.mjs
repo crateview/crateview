@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { assignWebsiteVersion } from './docs-publication.mjs';
 import { apps } from './release-plan.mjs';
 
@@ -21,6 +21,13 @@ function assertCurrentMain() {
 }
 
 assertCurrentMain();
+if (process.env.PUBLISHED_DOCS_PATCH === 'true') {
+  writeFileSync(
+    '.changeset/published-docs.md',
+    '---\n"@crateview/website": patch\n---\n\nUpdate the published documentation.\n',
+    { flag: 'wx' },
+  );
+}
 run('exec', '--no', '--', 'changeset', 'version');
 for (const [index, directory] of directories.entries()) {
   if (version(directory) !== before[index]) {

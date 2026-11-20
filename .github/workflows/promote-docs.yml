@@ -2,8 +2,10 @@ name: Promote registry documentation
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '35 * * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
 
 permissions:
   contents: read
@@ -14,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     concurrency:
-      group: crateview-production-writers
+      group: crateview-docs-promotion
       cancel-in-progress: false
     permissions:
       actions: write
@@ -53,6 +55,10 @@ jobs:
           [[ "$revision" =~ ^[a-f0-9]{40}$ && "$digest" =~ ^sha256:[a-f0-9]{64}$ ]]
           test "$(git rev-parse "refs/tags/$tag^{commit}")" = "$revision"
           git worktree add --detach "$RUNNER_TEMP/source" "$revision"
+          errata="$GITHUB_WORKSPACE/docs/release-errata/$tag.patch"
+          if [ -f "$errata" ]; then
+            git -C "$RUNNER_TEMP/source" apply --include='docs/*/docs/next/operations.md' "$errata"
+          fi
           echo "branch=$branch" >> "$GITHUB_OUTPUT"
           echo "image=ghcr.io/crateview/registry-ui@$digest" >> "$GITHUB_OUTPUT"
           echo "series=${tag%.*}" >> "$GITHUB_OUTPUT"
