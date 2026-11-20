@@ -30,6 +30,8 @@ Distribution は `REGISTRY_STORAGE_DELETE_ENABLED=true` とも読み取れます
 
 ## ガベージコレクションとバックアップ
 
+Crateview サーバーで `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true` を設定します。`NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` にガベージコレクションの実行を許可する管理対象ユーザーの正確なユーザー名を指定し、`NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` と `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN` を設定します。アダプターのトークンをブラウザーの設定に含めないでください。
+
 マニフェストを削除しても、すぐにディスクが再利用されるとは限りません。ガベージ コレクションは別個のレジストリ管理タスクです。 Crateview では実行されません。
 
 ストレージ ドライバーに適した方法を使用して、レジストリ ストレージとその構成をバックアップします。容器を交換するときは容量を維持してください。ガベージ コレクションと書き込み調整については、Distribution の指示に従ってください。

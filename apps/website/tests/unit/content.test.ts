@@ -60,6 +60,14 @@ describe('versioned multilingual documentation', () => {
       })
     }
   }
+  it('keeps the technical operations examples in next translations aligned before promotion', () => {
+    const operations = (locale: string) =>
+      contentContract(read(`../../docs/${locale}/docs/next/operations.md`), 'operations')
+    const reference = operations('en')
+    for (const { code } of supportedLocales) {
+      if (code !== 'en' && code !== 'de') expect(operations(code), code).toEqual(reference)
+    }
+  })
   it('lets all v0.5 installation variants select the release used by upgrade instructions', () => {
     const release = getDocVersion('v0.5')!.release
     const binding = 'image: ghcr.io/crateview/registry-ui:${CRATEVIEW_VERSION:-' + release + '}'

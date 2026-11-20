@@ -30,6 +30,8 @@ Sélectionnez un ou plusieurs tags du tableau et confirmez la suppression. L'ape
 
 ## Collecte des déchets et sauvegardes
 
+Définissez `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true`, indiquez dans `NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` les noms exacts des utilisateurs gérés autorisés à lancer la collecte des déchets et configurez `NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` et `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN` sur le serveur Crateview. N’ajoutez pas le jeton de l’adaptateur à la configuration du navigateur.
+
 La suppression d'un manifeste ne garantit pas une récupération immédiate du disque. La collecte des déchets est une tâche d'administration de registre distincte ; Crateview ne l'exécute pas.
 
 Sauvegardez votre stockage de registre et sa configuration à l'aide d'une méthode appropriée au pilote de stockage. Conserver les volumes lors du remplacement des conteneurs. Suivez les instructions de Distribution pour le garbage collection et écrivez la coordination :

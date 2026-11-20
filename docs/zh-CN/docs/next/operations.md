@@ -30,6 +30,8 @@ Distribution 也可以读取 `REGISTRY_STORAGE_DELETE_ENABLED=true`。更改环�
 
 ## 垃圾收集和备份
 
+在 Crateview 服务器上设置 `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true`，在 `NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` 中填写获准运行垃圾收集的受管用户的确切用户名，并配置 `NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` 和 `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN`。请勿将适配器令牌放入浏览器配置。
+
 删除清单并不保证立即回收磁盘。垃圾收集是一项单独的镜像仓库管理任务； Crateview 不运行它。
 
 使用适合存储驱动程序的方法备份镜像仓库存储及其配置。更换容器时保留卷。请遵循 Distribution 的垃圾收集和写入协调说明：

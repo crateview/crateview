@@ -30,6 +30,8 @@ Pilih satu atau beberapa tag di tabel dan konfirmasi penghapusan. Pratinjau memp
 
 ## Pengumpulan dan pencadangan sampah
 
+Tetapkan `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true`, isi `NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` dengan nama pengguna terkelola yang diizinkan menjalankan pengumpulan sampah secara persis, lalu konfigurasikan `NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` dan `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN` di server Crateview. Jangan simpan token adaptor dalam konfigurasi browser.
+
 Menghapus manifes tidak menjanjikan reklamasi disk secara langsung. Pengumpulan sampah adalah tugas administrasi pencatatan yang terpisah; Crateview tidak menjalankannya.
 
 Cadangkan penyimpanan registri Anda dan konfigurasinya menggunakan metode yang sesuai dengan driver penyimpanan. Pertahankan volume saat mengganti wadah. Ikuti instruksi Distribution untuk pengumpulan sampah dan tulis koordinasi:

@@ -47,9 +47,10 @@ version/locale combination, localized links, source revisions and image referenc
 ## Publishing
 
 The website builds from this root `docs/` directory without a submodule.
-For manual corrections, review the docs, matching captures if needed and a website
-Changeset in the same PR. Routine registry releases use the promotion workflow
-below. Old unversioned URLs redirect temporarily to the selected stable version.
+For manual corrections, review the docs and matching captures if needed in
+the same PR. Changes to published versioned guides queue a website patch in the
+reviewed Version Packages PR unless a website bump is already queued. Routine
+registry releases use the promotion workflow below. Old unversioned URLs redirect temporarily to the selected stable version.
 Internal next pages are not published; on-site search stays
 inside the selected released version and language.
 
@@ -66,7 +67,12 @@ The registry UI release workflow pins the tagged commit, its `docs/` directory,
 and the verified registry image digest in its `docs-promotion.json` release asset. The website promotes that immutable snapshot
 to `v<major>.<minor>`; patches update the existing minor. Older minor archives are
 retained. Changes committed after the request was created belong to a future
-release, even when a promotion is retried.
+release. An exact-tag patch in `release-errata/` can correct operations guides
+in a pending immutable snapshot. The release receipt, tag and image digest are
+preserved.
+
+New release receipts and website publications queue promotion. Changes under
+`docs/` on main also trigger a scan. Use manual dispatch to retry a failed run.
 
 Installation and operations pages contain explicit `release:<slug>:start/end`
 HTML comment markers. The promotion replaces only those sections with the matching

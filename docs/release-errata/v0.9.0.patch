@@ -1,0 +1,143 @@
+diff --git a/docs/ar/docs/next/operations.md b/docs/ar/docs/next/operations.md
+index 0830271..6ded5d5 100644
+--- a/docs/ar/docs/next/operations.md
++++ b/docs/ar/docs/next/operations.md
+@@ -30,6 +30,8 @@ storage:
+
+ ## جمع القمامة والنسخ الاحتياطي
+
++اضبط `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true`، وحدد في `NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` أسماء المستخدمين المُدارين المسموح لهم بتشغيل جمع القمامة كما هي، واضبط `NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` و`NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN` على خادم Crateview. لا تضع رمز المهايئ في إعدادات المتصفح.
++
+ لا يؤدي حذف البيان إلى الوعد باستعادة القرص فورًا. تعتبر عملية جمع البيانات المهملة مهمة منفصلة لإدارة التسجيل؛ Crateview لا يقوم بتشغيله.
+
+ قم بعمل نسخة احتياطية من مساحة تخزين السجل الخاص بك وتكوينه باستخدام طريقة مناسبة لبرنامج تشغيل التخزين. احتفظ بالكميات عند استبدال الحاويات. اتبع تعليمات Distribution لجمع البيانات المهملة وتنسيق الكتابة:
+diff --git a/docs/bn/docs/next/operations.md b/docs/bn/docs/next/operations.md
+index d473645..e01fff1 100644
+--- a/docs/bn/docs/next/operations.md
++++ b/docs/bn/docs/next/operations.md
+@@ -30,6 +30,8 @@ Distribution এছাড়াও `REGISTRY_STORAGE_DELETE_ENABLED=true` পড
+
+ ## আবর্জনা সংগ্রহ এবং ব্যাকআপ
+
++Crateview সার্ভারে `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true` সেট করুন। `NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS`-এ আবর্জনা সংগ্রহ চালানোর অনুমতিপ্রাপ্ত পরিচালিত ব্যবহারকারীদের সঠিক নাম দিন এবং `NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` ও `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN` কনফিগার করুন। অ্যাডাপ্টারের টোকেন ব্রাউজারের কনফিগারেশনে রাখবেন না।
++
+ একটি ম্যানিফেস্ট মুছে ফেলা অবিলম্বে ডিস্ক পুনরুদ্ধারের প্রতিশ্রুতি দেয় না৷ আবর্জনা সংগ্রহ একটি পৃথক রেজিস্ট্রি প্রশাসনের কাজ; Crateview এটি চালায় না।
+
+ স্টোরেজ ড্রাইভারের জন্য উপযুক্ত পদ্ধতি ব্যবহার করে আপনার রেজিস্ট্রি স্টোরেজ এবং এর কনফিগারেশন ব্যাক আপ করুন। পাত্রে প্রতিস্থাপন করার সময় ভলিউম রাখুন। আবর্জনা সংগ্রহের জন্য Distribution-এর নির্দেশাবলী অনুসরণ করুন এবং সমন্বয় লিখুন:
+diff --git a/docs/es/docs/next/operations.md b/docs/es/docs/next/operations.md
+index 926d80c..cfdcfbb 100644
+--- a/docs/es/docs/next/operations.md
++++ b/docs/es/docs/next/operations.md
+@@ -30,6 +30,8 @@ Selecciona una o varias etiquetas en la tabla y confirma la eliminación. La vis
+
+ ## Recolección de basura y copias de seguridad.
+
++Define `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true`, indica en `NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` los nombres exactos de los usuarios gestionados autorizados a ejecutar la recolección de basura y configura `NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` y `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN` en el servidor de Crateview. No incluyas el token del adaptador en la configuración del navegador.
++
+ Eliminar un manifiesto no promete una recuperación inmediata del disco. La recolección de basura es una tarea de administración del registro separada; Crateview no lo ejecuta.
+
+ Haga una copia de seguridad del almacenamiento de su registro y su configuración utilizando un método apropiado para el controlador de almacenamiento. Mantenga los volúmenes al reemplazar los contenedores. Siga las instrucciones de Distribution para la recolección de basura y la coordinación de escritura:
+diff --git a/docs/fr/docs/next/operations.md b/docs/fr/docs/next/operations.md
+index f1c0560..8a2e232 100644
+--- a/docs/fr/docs/next/operations.md
++++ b/docs/fr/docs/next/operations.md
+@@ -30,6 +30,8 @@ Sélectionnez un ou plusieurs tags du tableau et confirmez la suppression. L'ape
+
+ ## Collecte des déchets et sauvegardes
+
++Définissez `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true`, indiquez dans `NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` les noms exacts des utilisateurs gérés autorisés à lancer la collecte des déchets et configurez `NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` et `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN` sur le serveur Crateview. N’ajoutez pas le jeton de l’adaptateur à la configuration du navigateur.
++
+ La suppression d'un manifeste ne garantit pas une récupération immédiate du disque. La collecte des déchets est une tâche d'administration de registre distincte ; Crateview ne l'exécute pas.
+
+ Sauvegardez votre stockage de registre et sa configuration à l'aide d'une méthode appropriée au pilote de stockage. Conserver les volumes lors du remplacement des conteneurs. Suivez les instructions de Distribution pour le garbage collection et écrivez la coordination :
+diff --git a/docs/hi/docs/next/operations.md b/docs/hi/docs/next/operations.md
+index 5ea5a57..29bff78 100644
+--- a/docs/hi/docs/next/operations.md
++++ b/docs/hi/docs/next/operations.md
+@@ -30,6 +30,8 @@ Distribution `REGISTRY_STORAGE_DELETE_ENABLED=true` भी पढ़ सकत
+
+ ## कचरा संग्रहण और बैकअप
+
++Crateview सर्वर पर `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true` सेट करें। `NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` में कचरा संग्रहण चलाने की अनुमति वाले प्रबंधित उपयोगकर्ताओं के सटीक नाम दें और `NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` तथा `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN` कॉन्फ़िगर करें। अडैप्टर का टोकन ब्राउज़र कॉन्फ़िगरेशन में न रखें।
++
+ किसी मेनिफ़ेस्ट को हटाना तत्काल डिस्क पुनर्प्राप्ति का वादा नहीं करता है। कचरा संग्रहण एक अलग रजिस्ट्री प्रशासन कार्य है; Crateview इसे नहीं चलाता है.
+
+ स्टोरेज ड्राइवर के लिए उपयुक्त विधि का उपयोग करके अपने रजिस्ट्री स्टोरेज और उसके कॉन्फ़िगरेशन का बैकअप लें। कंटेनर बदलते समय मात्रा रखें। कचरा संग्रहण और समन्वय लिखने के लिए Distribution के निर्देशों का पालन करें:
+diff --git a/docs/id/docs/next/operations.md b/docs/id/docs/next/operations.md
+index 9fc1fbb..056909d 100644
+--- a/docs/id/docs/next/operations.md
++++ b/docs/id/docs/next/operations.md
+@@ -30,6 +30,8 @@ Pilih satu atau beberapa tag di tabel dan konfirmasi penghapusan. Pratinjau memp
+
+ ## Pengumpulan dan pencadangan sampah
+
++Tetapkan `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true`, isi `NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` dengan nama pengguna terkelola yang diizinkan menjalankan pengumpulan sampah secara persis, lalu konfigurasikan `NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` dan `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN` di server Crateview. Jangan simpan token adaptor dalam konfigurasi browser.
++
+ Menghapus manifes tidak menjanjikan reklamasi disk secara langsung. Pengumpulan sampah adalah tugas administrasi pencatatan yang terpisah; Crateview tidak menjalankannya.
+
+ Cadangkan penyimpanan registri Anda dan konfigurasinya menggunakan metode yang sesuai dengan driver penyimpanan. Pertahankan volume saat mengganti wadah. Ikuti instruksi Distribution untuk pengumpulan sampah dan tulis koordinasi:
+diff --git a/docs/ja/docs/next/operations.md b/docs/ja/docs/next/operations.md
+index f4a2d0a..233a275 100644
+--- a/docs/ja/docs/next/operations.md
++++ b/docs/ja/docs/next/operations.md
+@@ -30,6 +30,8 @@ Distribution は `REGISTRY_STORAGE_DELETE_ENABLED=true` とも読み取れます
+
+ ## ガベージコレクションとバックアップ
+
++Crateview サーバーで `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true` を設定します。`NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` にガベージコレクションの実行を許可する管理対象ユーザーの正確なユーザー名を指定し、`NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` と `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN` を設定します。アダプターのトークンをブラウザーの設定に含めないでください。
++
+ マニフェストを削除しても、すぐにディスクが再利用されるとは限りません。ガベージ コレクションは別個のレジストリ管理タスクです。 Crateview では実行されません。
+
+ ストレージ ドライバーに適した方法を使用して、レジストリ ストレージとその構成をバックアップします。容器を交換するときは容量を維持してください。ガベージ コレクションと書き込み調整については、Distribution の指示に従ってください。
+diff --git a/docs/pt-BR/docs/next/operations.md b/docs/pt-BR/docs/next/operations.md
+index 3dfdc43..5297eef 100644
+--- a/docs/pt-BR/docs/next/operations.md
++++ b/docs/pt-BR/docs/next/operations.md
+@@ -30,6 +30,8 @@ Selecione uma ou mais tags na tabela e confirme a exclusão. A prévia atualiza
+
+ ## Coleta de lixo e backups
+
++Defina `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true`, informe em `NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` os nomes exatos dos usuários gerenciados autorizados a executar a coleta de lixo e configure `NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` e `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN` no servidor do Crateview. Não inclua o token do adaptador na configuração do navegador.
++
+ A exclusão de um manifesto não promete recuperação imediata do disco. A coleta de lixo é uma tarefa separada de administração de registro; Crateview não o executa.
+
+ Faça backup do armazenamento do registro e de sua configuração usando um método apropriado ao driver de armazenamento. Mantenha os volumes ao substituir os recipientes. Siga as instruções da Distribution para coleta de lixo e coordenação de gravação:
+diff --git a/docs/ru/docs/next/operations.md b/docs/ru/docs/next/operations.md
+index d8928af..c347a42 100644
+--- a/docs/ru/docs/next/operations.md
++++ b/docs/ru/docs/next/operations.md
+@@ -30,6 +30,8 @@ Distribution также может читать `REGISTRY_STORAGE_DELETE_ENABLED
+
+ ## Сбор мусора и резервное копирование
+
++На сервере Crateview установите `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true`. Укажите в `NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` точные имена управляемых пользователей, которым разрешён запуск сбора мусора, и настройте `NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` и `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN`. Не помещайте токен адаптера в конфигурацию браузера.
++
+ Удаление манифеста не обещает немедленного восстановления диска. Сбор мусора — это отдельная задача администрирования реестра; Crateview его не запускает.
+
+ Создайте резервную копию хранилища реестра и его конфигурации, используя метод, соответствующий драйверу хранилища. Сохраняйте объемы при замене контейнеров. Следуйте инструкциям Distribution по сбору мусора и координации записи:
+diff --git a/docs/ur/docs/next/operations.md b/docs/ur/docs/next/operations.md
+index c8ab1a6..d1f994b 100644
+--- a/docs/ur/docs/next/operations.md
++++ b/docs/ur/docs/next/operations.md
+@@ -30,6 +30,8 @@ Distribution `REGISTRY_STORAGE_DELETE_ENABLED=true` بھی پڑھ سکتا ہے
+
+ ## کچرا جمع کرنا اور بیک اپ
+
++Crateview سرور پر `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true` سیٹ کریں، `NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` میں کچرا جمع کرنے کی اجازت رکھنے والے زیرِ انتظام صارفین کے درست نام درج کریں، اور `NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` اور `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN` ترتیب دیں۔ اڈاپٹر کا ٹوکن براؤزر کی ترتیب میں نہ رکھیں۔
++
+ مینی فیسٹ کو حذف کرنا فوری طور پر ڈسک کی بحالی کا وعدہ نہیں کرتا ہے۔ کوڑا اٹھانا رجسٹری انتظامیہ کا الگ کام ہے۔ Crateview اسے نہیں چلاتا۔
+
+ اپنے رجسٹری سٹوریج اور اس کی کنفیگریشن کو سٹوریج ڈرائیور کے لیے موزوں طریقہ استعمال کرتے ہوئے بیک اپ کریں۔ کنٹینرز کو تبدیل کرتے وقت حجم رکھیں۔ کوڑا اٹھانے کے لیے Distribution کی ہدایات پر عمل کریں اور کوآرڈینیشن لکھیں:
+diff --git a/docs/zh-CN/docs/next/operations.md b/docs/zh-CN/docs/next/operations.md
+index 75ac856..8a17bc5 100644
+--- a/docs/zh-CN/docs/next/operations.md
++++ b/docs/zh-CN/docs/next/operations.md
+@@ -30,6 +30,8 @@ Distribution 也可以读取 `REGISTRY_STORAGE_DELETE_ENABLED=true`。更改环
+
+ ## 垃圾收集和备份
+
++在 Crateview 服务器上设置 `NUXT_REGISTRY_GARBAGE_COLLECTION_ENABLED=true`，在 `NUXT_REGISTRY_GARBAGE_COLLECTION_ALLOWED_USERS` 中填写获准运行垃圾收集的受管用户的确切用户名，并配置 `NUXT_REGISTRY_GARBAGE_COLLECTION_ORIGIN` 和 `NUXT_REGISTRY_GARBAGE_COLLECTION_TOKEN`。请勿将适配器令牌放入浏览器配置。
++
+ 删除清单并不保证立即回收磁盘。垃圾收集是一项单独的镜像仓库管理任务； Crateview 不运行它。
+
+ 使用适合存储驱动程序的方法备份镜像仓库存储及其配置。更换容器时保留卷。请遵循 Distribution 的垃圾收集和写入协调说明：
