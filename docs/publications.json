@@ -38,5 +38,14 @@
     "docsRevision": "8248c5b9336e49bec28390f3762a9c8101231f4e",
     "docsCommit": "52a7be3122b01ab0d81d698b9286f201f36b5a45",
     "websiteVersion": "0.4.10"
+  },
+  "v0.9.0": {
+    "schema": 2,
+    "tag": "v0.9.0",
+    "registryRevision": "2ffd4d7ab7b86bf09194cadea65f7abf07ec5154",
+    "docsRevision": "2ffd4d7ab7b86bf09194cadea65f7abf07ec5154",
+    "docsPath": "docs",
+    "imageDigest": "sha256:639a76228b953ae565b8bafd55d29b9eb79d2fc6e1e3ec9dd24f57e4ea62f90a",
+    "capture": "images/docs/v0.9/capture.json"
   }
 }
