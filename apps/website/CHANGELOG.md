@@ -1,5 +1,11 @@
 # @crateview/website
 
+## 0.4.12
+
+### Patch Changes
+
+- fb548c9: Publish documentation and verified captures for registry UI v0.9.0.
+
 ## 0.4.11
 
 ### Patch Changes

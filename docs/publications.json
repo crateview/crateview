@@ -46,6 +46,7 @@
     "docsRevision": "2ffd4d7ab7b86bf09194cadea65f7abf07ec5154",
     "docsPath": "docs",
     "imageDigest": "sha256:639a76228b953ae565b8bafd55d29b9eb79d2fc6e1e3ec9dd24f57e4ea62f90a",
-    "capture": "images/docs/v0.9/capture.json"
+    "capture": "images/docs/v0.9/capture.json",
+    "websiteVersion": "0.4.12"
   }
 }
